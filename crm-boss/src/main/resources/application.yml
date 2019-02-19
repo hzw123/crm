@@ -1,0 +1,40 @@
+server:
+  port: 8999
+  tomcat:
+    protocol-header: x-forwarded-proto
+    remote-ip-header: x-forwarded-for
+    port-header: X-Forwarded-Port
+  use-forward-headers: true
+  servlet:
+    session:
+      #24*60*60=
+      timeout: 86400
+
+spring:
+  application:
+    name: crm-boss
+  profiles:
+    active: local
+
+#shiro
+  shiro:
+    login-url: /login
+    success-url: /
+    unauthorized-url: /403
+    filter-chain-definition-map:
+      anon: /login/**,/swagger*/**,/v2/api-docs
+      logout: /logout #退出
+      #需要认证的路径
+      authc: /authc
+      user: /**
+
+logging:
+  file: ./log/${spring.application.name}.log
+
+
+
+
+
+
+
+
