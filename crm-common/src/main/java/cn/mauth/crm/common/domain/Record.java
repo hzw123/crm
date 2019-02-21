@@ -31,6 +31,7 @@ public class Record implements Serializable{
     private String action;
 
     /**详情*/
+    @Column(columnDefinition = "text")
     private String details;
 
     /**用户Id*/

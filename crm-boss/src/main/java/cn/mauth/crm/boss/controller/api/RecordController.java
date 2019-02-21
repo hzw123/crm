@@ -4,6 +4,7 @@ import cn.mauth.crm.common.repository.RecordRepository;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.PageUtil;
 import cn.mauth.crm.util.common.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/records")
+@Api("记录API")
 public class RecordController extends BaseController{
 
     @Autowired

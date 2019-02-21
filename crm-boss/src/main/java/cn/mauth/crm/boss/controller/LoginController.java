@@ -8,29 +8,28 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 public class LoginController extends BaseController{
+//
+//    @GetMapping("/login")
+//    @ApiOperation(value = "登录")
+//    public Result login(){
+//        Subject subject=SecurityUtils.getSubject();
+//
+//        if(subject.isAuthenticated()){
+//            return ok("已经登录成功");
+//        }
+//
+//        log.info("请先登录");
+//
+//        return ok("请先登录");
+//    }
+
 
     @GetMapping("/login")
-    @ApiOperation(value = "登录")
-    public Result login(){
-        Subject subject=SecurityUtils.getSubject();
-
-        if(subject.isAuthenticated()){
-            return ok("已经登录成功");
-        }
-
-        log.info("请先登录");
-
-        return ok("请先登录");
-    }
-
-
-    @PostMapping("/login")
     @ApiOperation(value = "登录")
     public Result login(UsernamePasswordToken token){
         Subject subject=SecurityUtils.getSubject();

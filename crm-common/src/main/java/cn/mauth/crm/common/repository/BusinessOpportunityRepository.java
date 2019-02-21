@@ -6,13 +6,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface BusinessOpportunityRepository extends BaseRepository<BusinessOpportunity,Long> {
 
     @Query(value = "update business_opportunity set status=:status where id=:id",nativeQuery = true)
     @Modifying
-    @Transactional
     void updateStatus(@Param("id") Long id,@Param("status") int status);
+
 }

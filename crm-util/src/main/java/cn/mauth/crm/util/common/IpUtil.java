@@ -8,7 +8,7 @@ public class IpUtil {
      * 获取客户端IP地址
      * @return
      */
-    public String getIp(HttpServletRequest request) {
+    public static String getIp(HttpServletRequest request) {
 
         String ip = request.getHeader("x-forwarded-for");
 

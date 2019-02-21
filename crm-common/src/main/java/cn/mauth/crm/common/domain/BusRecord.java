@@ -26,6 +26,12 @@ public class BusRecord implements Serializable{
     /**阶段变化*/
     private String stage;
 
+    /**阶段Id*/
+    private Long stageId;
+
+    /**阶段顺序*/
+    private int sort;
+
     /**商机ID*/
     private Long busId;
 
@@ -59,6 +65,22 @@ public class BusRecord implements Serializable{
 
     public void setStage(String stage) {
         this.stage = stage;
+    }
+
+    public Long getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(Long stageId) {
+        this.stageId = stageId;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     public Long getBusId() {

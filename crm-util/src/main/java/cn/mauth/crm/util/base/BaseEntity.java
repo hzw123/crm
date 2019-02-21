@@ -30,9 +30,9 @@ public abstract class BaseEntity implements Serializable{
     @Column(nullable = false)
     private String creator;
 
-    /**创建者*/
+    /**修改者*/
     @Column(nullable = false)
-    private String mender;
+    private String modified;
 
     /**所有者*/
     @Column(nullable = false)
@@ -74,12 +74,12 @@ public abstract class BaseEntity implements Serializable{
         this.creator = creator;
     }
 
-    public String getMender() {
-        return mender;
+    public String getModified() {
+        return modified;
     }
 
-    public void setMender(String mender) {
-        this.mender = mender;
+    public void setModified(String modified) {
+        this.modified = modified;
     }
 
     public String getOwner() {

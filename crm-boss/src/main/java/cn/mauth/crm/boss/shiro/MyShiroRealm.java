@@ -1,9 +1,13 @@
 package cn.mauth.crm.boss.shiro;
 
 
+import cn.mauth.crm.common.domain.SysLoginLog;
+import cn.mauth.crm.common.repository.SysLoginLogRepository;
 import cn.mauth.crm.common.repository.SysUserInfoRepository;
 import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.util.common.HexUtil;
+import cn.mauth.crm.util.common.HttpUtil;
+import cn.mauth.crm.util.common.IpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -27,6 +31,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 	@Autowired
 	private SysUserInfoRepository sysUserInfoRepository;
+
+	@Autowired
+	private SysLoginLogRepository sysLoginLogRepository;
 
 	/**
 	 * 认证登陆
@@ -76,7 +83,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 				this.getName() // realm name
 		);
 
-		addLoginLog(sysUserInfo,false);
+		this.addLoginLog(sysUserInfo);
 
 		return authenticationInfo;
 
@@ -111,8 +118,15 @@ public class MyShiroRealm extends AuthorizingRealm {
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 
-	public static void addLoginLog(SysUserInfo sysUserInfo, boolean flag){
+	private void addLoginLog(SysUserInfo sysUserInfo){
 
+		SysLoginLog sysLoginLog=new SysLoginLog();
+
+		sysLoginLog.setIp(IpUtil.getIp(HttpUtil.getRequest()));
+
+		sysLoginLog.setUserName(sysUserInfo.getUserName());
+
+		sysLoginLogRepository.save(sysLoginLog);
     }
 
 }

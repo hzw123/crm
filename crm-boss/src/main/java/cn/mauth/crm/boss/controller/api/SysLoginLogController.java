@@ -3,6 +3,7 @@ package cn.mauth.crm.boss.controller.api;
 import cn.mauth.crm.common.repository.SysLoginLogRepository;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/crm/v1/log")
+@Api("登录日志API")
 public class SysLoginLogController extends BaseController{
 
     @Autowired
