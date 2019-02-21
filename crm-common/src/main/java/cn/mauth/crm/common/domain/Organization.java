@@ -16,9 +16,11 @@ public class Organization extends BaseEntity{
     /**机构名称*/
     @Column(unique = true,updatable = false,length = 10)
     private String name;
+
     /**机构代码*/
     @Column(unique = true,updatable = false,length = 10)
     private String code;
+
     /**机构状态*/
     private int status;
 

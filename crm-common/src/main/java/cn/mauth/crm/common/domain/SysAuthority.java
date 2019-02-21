@@ -1,16 +1,14 @@
 package cn.mauth.crm.common.domain;
 
+import cn.mauth.crm.util.base.BaseEntity;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class SysAuthority implements Serializable{
+public class SysAuthority extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     /**权限名称*/
     @Column(updatable = false,length = 100)
@@ -21,14 +19,6 @@ public class SysAuthority implements Serializable{
 
     /**状态*/
     private int status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

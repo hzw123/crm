@@ -18,14 +18,14 @@ public final class Constants {
 	 * @author mauth
 	 */
 	public interface Session {
-		public final static String USER_TYPE = "accounting_user_type";
-		public final static String USER_ID = "accounting_user_info_id";
-		public final static String USER = "accounting_user";
-		public final static String MENU = "accounting_menu";
-		public final static String PERMISSIONS = "accounting_Permissions";
-		public final static String ROLE = "accounting_role";
-		public final static String ACCOUNT = "accounting_account";
-		public final static String SESSION_INDEX = "accounting_sessionIndex";
+		public final static String USER_TYPE = "crm_mauth_cn_user_type";
+		public final static String USER_ID = "crm_mauth_cn_user_info_id";
+		public final static String USER = "crm_mauth_cn_user";
+		public final static String MENU = "crm_mauth_cn_menu";
+		public final static String PERMISSIONS = "crm_mauth_cn_Permissions";
+		public final static String ROLE = "crm_mauth_cn_role";
+		public final static String ACCOUNT = "crm_mauth_cn_account";
+		public final static String SESSION_INDEX = "crm_mauth_cn_sessionIndex";
 	}
 
 	public interface Redis {

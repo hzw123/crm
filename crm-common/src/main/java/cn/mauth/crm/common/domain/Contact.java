@@ -4,13 +4,12 @@ import cn.mauth.crm.util.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 /**
  * 联系人
  */
 @Entity
-public class Contacts extends BaseEntity{
+public class Contact extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
 
@@ -18,9 +17,25 @@ public class Contacts extends BaseEntity{
     @Column(nullable = false,length = 50)
     private String name;
 
+    /**电话*/
+    @Column(unique = true,nullable = false,length = 11)
+    private String telephone ;
+
     /**手机*/
     @Column(unique = true,nullable = false,length = 11)
     private String phone;
+
+    /**部门*/
+    @Column(nullable = false,length = 100)
+    private String department;
+
+    /**职位*/
+    @Column(nullable = false,length = 100)
+    private String job;
+
+    /**上级*/
+    @Column(nullable = false,length = 100)
+    private String superior;
 
     /**邮箱*/
     private String email;
@@ -34,9 +49,12 @@ public class Contacts extends BaseEntity{
     /**兴趣爱好*/
     private String interest;
 
-    /**所属客户*/
-    @ManyToOne
-    private Client client;
+    /**所属客户ID*/
+    private Long clientId;
+
+    /**来源*/
+    @Column(nullable = false)
+    private String source;
 
     public String getName() {
         return name;
@@ -46,12 +64,12 @@ public class Contacts extends BaseEntity{
         this.name = name;
     }
 
-    public Client getClient() {
-        return client;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getPhone() {
@@ -60,6 +78,30 @@ public class Contacts extends BaseEntity{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getSuperior() {
+        return superior;
+    }
+
+    public void setSuperior(String superior) {
+        this.superior = superior;
     }
 
     public String getEmail() {
@@ -92,5 +134,21 @@ public class Contacts extends BaseEntity{
 
     public void setInterest(String interest) {
         this.interest = interest;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

@@ -12,10 +12,11 @@ import java.util.Set;
 public class SysRole extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
+
     /**名称*/
+    @Column(unique = true,updatable = false,length = 20)
     private String name;
-    /**详情*/
-    private String desc;
+
     /**状态*/
     private int status;
 
@@ -31,14 +32,6 @@ public class SysRole extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
     public int getStatus() {

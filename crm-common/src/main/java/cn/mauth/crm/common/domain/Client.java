@@ -4,7 +4,6 @@ import cn.mauth.crm.util.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 /**
  * 客户
@@ -14,9 +13,13 @@ public class Client extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
 
-    /**客户名字*/
+    /**客户名称*/
     @Column(updatable = false,length = 50)
     private String name;
+
+    /**网站*/
+    @Column(length = 200)
+    private String website;
 
     /**客户类型*/
     @Column(updatable = false)
@@ -26,10 +29,12 @@ public class Client extends BaseEntity{
     @Column(updatable = false,length = 100)
     private String code;
 
-    /**区域*/
-    private String area;
+    /**地址简称*/
+    @Column(updatable = false,length = 100)
+    private String addressOr;
 
     /**地址*/
+    @Column(updatable = false,length = 200)
     private String address;
 
     /**客户联系电话*/
@@ -39,12 +44,20 @@ public class Client extends BaseEntity{
     /**行业*/
     private String profession;
 
-    /**职位*/
-    private String job;
+    /**年收入*/
+    private double annualIncome;
 
-    /**所属公海*/
-    @ManyToOne
-    private HighSeas highSeas;
+    /**面积*/
+    private String acreage;
+
+    /**员工数*/
+    private int staffNumber;
+
+    /**会员数*/
+    private int memberNumber;
+
+    /**是否属于公海*/
+    private boolean isCommon;
 
     public String getName() {
         return name;
@@ -52,6 +65,14 @@ public class Client extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public String getType() {
@@ -70,12 +91,12 @@ public class Client extends BaseEntity{
         this.code = code;
     }
 
-    public String getArea() {
-        return area;
+    public String getAddressOr() {
+        return addressOr;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setAddressOr(String addressOr) {
+        this.addressOr = addressOr;
     }
 
     public String getAddress() {
@@ -102,19 +123,43 @@ public class Client extends BaseEntity{
         this.profession = profession;
     }
 
-    public String getJob() {
-        return job;
+    public double getAnnualIncome() {
+        return annualIncome;
     }
 
-    public void setJob(String job) {
-        this.job = job;
+    public void setAnnualIncome(double annualIncome) {
+        this.annualIncome = annualIncome;
     }
 
-    public HighSeas getHighSeas() {
-        return highSeas;
+    public String getAcreage() {
+        return acreage;
     }
 
-    public void setHighSeas(HighSeas highSeas) {
-        this.highSeas = highSeas;
+    public void setAcreage(String acreage) {
+        this.acreage = acreage;
+    }
+
+    public int getStaffNumber() {
+        return staffNumber;
+    }
+
+    public void setStaffNumber(int staffNumber) {
+        this.staffNumber = staffNumber;
+    }
+
+    public int getMemberNumber() {
+        return memberNumber;
+    }
+
+    public void setMemberNumber(int memberNumber) {
+        this.memberNumber = memberNumber;
+    }
+
+    public boolean isCommon() {
+        return isCommon;
+    }
+
+    public void setCommon(boolean common) {
+        isCommon = common;
     }
 }

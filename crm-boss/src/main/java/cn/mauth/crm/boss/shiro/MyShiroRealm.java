@@ -1,7 +1,7 @@
 package cn.mauth.crm.boss.shiro;
 
 
-import cn.mauth.crm.common.dao.SysUserInfoDao;
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
 import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.util.common.HexUtil;
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +26,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 	private static final Logger log= LoggerFactory.getLogger(MyShiroRealm.class);
 
 	@Autowired
-	private SysUserInfoDao sysUserInfoDao;
+	private SysUserInfoRepository sysUserInfoRepository;
 
 	/**
 	 * 认证登陆
@@ -43,7 +43,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 
-		SysUserInfo sysUserInfo = sysUserInfoDao.findByUserName(username);
+		SysUserInfo sysUserInfo = sysUserInfoRepository.findByUserName(username);
 		
 		log.info("----->>userInfo=" + sysUserInfo.getUserName());
 
@@ -55,7 +55,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("账号不存在");
 		}
 
-		if (!sysUserInfo.getPwd().equals(HexUtil.md5Hex(sysUserInfo.getSalt() + password))) {
+		if (!sysUserInfo.getPwd().equals(HexUtil.md5Hex( password+sysUserInfo.getSalt()))) {
 			throw new UnknownAccountException("账号或者密码不正确");
 		}
 
@@ -65,6 +65,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 		if(sysUserInfo.getStatus()==3){
 			throw new AuthenticationException("账户已注销");
+		}
+
+		if(sysUserInfo.isDelete()){
+			throw new AuthenticationException("账户已经删除");
 		}
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
 				username, // 用户名
@@ -108,7 +112,6 @@ public class MyShiroRealm extends AuthorizingRealm {
     }
 
 	public static void addLoginLog(SysUserInfo sysUserInfo, boolean flag){
-
 
     }
 

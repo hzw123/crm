@@ -143,6 +143,6 @@ public class ShiroAutoConfiguration {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
-    
+
 
 }

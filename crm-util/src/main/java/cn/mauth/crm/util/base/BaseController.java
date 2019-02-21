@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class BaseController {
 
-    private final Logger log= LoggerFactory.getLogger(this.getClass());
+    protected final Logger log= LoggerFactory.getLogger(this.getClass());
 
     public Result ok(){
         return Result.SUCCESS;

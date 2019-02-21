@@ -1,5 +1,7 @@
 package cn.mauth.crm.common.domain;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,14 +17,19 @@ public class SysLoginLog implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     /**登录时间*/
+    @CreatedDate
     @Column(updatable = false,columnDefinition = "datetime")
     private Date loginAt;
+
     /**用户名*/
     private String userName;
+
     /**IP地址*/
     private String ip;
-    /**详情*/
+
+    /**备注*/
     private String remark;
 
     public Long getId() {

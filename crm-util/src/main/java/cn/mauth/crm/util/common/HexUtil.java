@@ -32,14 +32,12 @@ public class HexUtil {
         int l = data.length;
         char[] out = new char[l << 1];
         int i = 0;
-
         for(int var5 = 0; i < l; ++i) {
-            out[var5++] = toDigits[(240 & data[i]) >>> 4];
-            out[var5++] = toDigits[15 & data[i]];
+            out[var5++] = toDigits[(0xff & data[i]) >>> 4];
+            out[var5++] = toDigits[0x0f & data[i]];
         }
 
         return out;
     }
-
 
 }

@@ -42,6 +42,15 @@ public class Visit extends BaseEntity{
     @Column(columnDefinition = "text")
     private String content;
 
+    /**客户Id*/
+    private Long clientId;
+
+    /**联系人Id*/
+    private Long contactId;
+
+    @Column(nullable = false,columnDefinition = "text")
+    private String pictureUrl;
+
     public String getTerminalName() {
         return terminalName;
     }
@@ -96,5 +105,29 @@ public class Visit extends BaseEntity{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public Long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

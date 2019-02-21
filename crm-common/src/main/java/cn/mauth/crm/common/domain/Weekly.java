@@ -17,10 +17,6 @@ public class Weekly extends BaseEntity{
     @Column(updatable = false,length = 50)
     private String userName;
 
-    /**用户Id*/
-    @Column(updatable = false,length = 50)
-    private Long userId;
-
     /**上周总结*/
     @Column(updatable = false,length = 50)
     private String lastSummary;
@@ -28,4 +24,29 @@ public class Weekly extends BaseEntity{
     /**下周计划*/
     @Column(updatable = false,length = 50)
     private String nextPlan;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    public String getLastSummary() {
+        return lastSummary;
+    }
+
+    public void setLastSummary(String lastSummary) {
+        this.lastSummary = lastSummary;
+    }
+
+    public String getNextPlan() {
+        return nextPlan;
+    }
+
+    public void setNextPlan(String nextPlan) {
+        this.nextPlan = nextPlan;
+    }
 }

@@ -17,12 +17,30 @@ public abstract class BaseEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
     @CreatedDate
     @Column(columnDefinition = "datetime")
     protected Date crateAt;
+
     @LastModifiedDate
     @Column(columnDefinition = "datetime")
     protected Date updateAt;
+
+    /**创建者*/
+    @Column(nullable = false)
+    private String creator;
+
+    /**创建者*/
+    @Column(nullable = false)
+    private String mender;
+
+    /**所有者*/
+    @Column(nullable = false)
+    private String owner;
+
+    /**备注*/
+    @Column(columnDefinition = "text")
+    protected String remark;
 
     public Long getId() {
         return id;
@@ -46,5 +64,37 @@ public abstract class BaseEntity implements Serializable{
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getMender() {
+        return mender;
+    }
+
+    public void setMender(String mender) {
+        this.mender = mender;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

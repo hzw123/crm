@@ -3,7 +3,7 @@ package cn.mauth.crm.util.common;
 import java.io.Serializable;
 
 public class Result<T> implements Serializable {
-	public static final long serialVersionUID = 42L;
+	public static final long serialVersionUID = 1L;
 
 	private static final int SUCCESS_CODE = 200;
 	private static final int CREATED_CODE = 201;

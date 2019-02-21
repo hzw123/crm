@@ -1,6 +1,7 @@
 package cn.mauth.crm.boss.controller;
 
 
+import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class LoginController {
+public class LoginController extends BaseController{
 
     @GetMapping("/login")
     @ApiOperation(value = "登录")
@@ -20,10 +21,12 @@ public class LoginController {
         Subject subject=SecurityUtils.getSubject();
 
         if(subject.isAuthenticated()){
-            return Result.success("已经登录成功");
+            return ok("已经登录成功");
         }
 
-        return Result.success("请先登录");
+        log.info("请先登录");
+
+        return ok("请先登录");
     }
 
 
@@ -33,12 +36,14 @@ public class LoginController {
         Subject subject=SecurityUtils.getSubject();
 
         if(subject.isAuthenticated()){
-            return Result.success("已经登录成功");
+            return ok("用户:"+token.getUsername()+"已经登录成功");
         }
 
         subject.login(token);
 
-        return Result.success("登录成功");
+        log.info("用户:"+token.getUsername()+"登录成功");
+
+        return ok("登录成功");
     }
 
     @GetMapping("/logout")
@@ -47,6 +52,6 @@ public class LoginController {
 
         SecurityUtils.getSubject().logout();
 
-        return Result.success("注销成功");
+        return ok("注销成功");
     }
 }
