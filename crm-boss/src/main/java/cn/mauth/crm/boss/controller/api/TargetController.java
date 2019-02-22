@@ -4,7 +4,7 @@ import cn.mauth.crm.common.domain.Target;
 import cn.mauth.crm.common.service.TargetService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/targets")
-@Api("目标API")
+@ApiModel("目标API")
 public class TargetController extends BaseController{
     
     @Autowired

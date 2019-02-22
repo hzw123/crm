@@ -43,3 +43,9 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+
+wxapp:
+  sessionHost: https://api.weixin.qq.com/sns/jscode2session
+  appId: 12323
+  secret: 41fewwrw34353
+  grantType: authorization_code

@@ -1,23 +1,21 @@
 package cn.mauth.crm.boss.controller.api;
 
+import cn.mauth.crm.common.domain.Contract;
 import cn.mauth.crm.common.domain.Organization;
 import cn.mauth.crm.common.service.OrganizationService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/org")
-@Api("机构API")
+@ApiModel("机构API")
 public class OrganizationController extends BaseController{
     
     @Autowired
@@ -52,6 +50,33 @@ public class OrganizationController extends BaseController{
     public Result page(Pageable pageable){
 
         return ok(service.page(pageable));
+    }
+
+    @PostMapping
+    @ApiOperation("添加一个机构")
+    public Result error(Organization organization) {
+        if(service.add(organization)){
+            return ok("添加成功");
+        }
+        return error("添加失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("修改机构")
+    public Result update(@PathVariable Long id,Organization organization) {
+        if(service.add(organization)){
+            return ok("修改成功");
+        }
+        return error("修改失败");
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除机构")
+    public Result deleteBy(@PathVariable Long id) {
+        if(service.deleteById(id)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
     }
 }
 

@@ -76,7 +76,6 @@ public abstract class BaseService<D extends BaseRepository,T extends BaseEntity>
     public boolean deleteById(Long id){
         boolean flag=false;
         try {
-
             repository.deleteById(id);
 
             flag=true;

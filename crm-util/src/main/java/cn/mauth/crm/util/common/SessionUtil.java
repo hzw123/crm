@@ -6,7 +6,9 @@ import org.springframework.util.Assert;
 
 public final class SessionUtil {
 
+
     public static Session getSession(){
+
         return SecurityUtils.getSubject().getSession();
     }
 
@@ -61,6 +63,15 @@ public final class SessionUtil {
 
     public static void saveRoles(Object value){
         SessionUtil.addSession(Constants.Session.ROLE,value);
+    }
+
+    public static void saveAdmin(boolean value){
+        SessionUtil.addSession(Constants.Session.ADMIN,value);
+    }
+
+    public static boolean isAdmin(){
+        Object value=SessionUtil.getValue(Constants.Session.ADMIN);
+        return value==null?false:((boolean)value);
     }
 
     public static Object getRoles(){

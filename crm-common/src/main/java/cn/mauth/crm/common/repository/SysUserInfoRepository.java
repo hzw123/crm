@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface SysUserInfoRepository extends BaseRepository<SysUserInfo,Long> {
 
-    SysUserInfo findByUserName(String userName);
+    SysUserInfo findByWxOpenId(String openId);
 
     @Query(value = "select *from sys_user_info " +
-            "where is_delete=0 " +
+            "where disabled=0 " +
             "and id in (" +
                 "select user_id from sys_user_role " +
                     "where role_id in (" +
@@ -25,15 +25,15 @@ public interface SysUserInfoRepository extends BaseRepository<SysUserInfo,Long> 
             ")", nativeQuery = true)
     List<SysUserInfo> findAdminList(@Param("type") String type);
 
-    @Query(value = "update sys_user_info set is_delete=1 where id=:id",nativeQuery = true)
+    @Query(value = "update sys_user_info set disabled=1 where id=:id",nativeQuery = true)
     @Modifying
     @Transactional
-    void deleteById(@Param("id") Long id);
+    void noDisabled(@Param("id") Long id);
 
-    @Query(value = "update sys_user_info set is_delete=1 where id in (:ids)",nativeQuery = true)
+    @Query(value = "update sys_user_info set disabled=1 where id in (:ids)",nativeQuery = true)
     @Modifying
     @Transactional
     void deleteByIds(@Param("ids") String ids);
 
-
+    int countByWxOpenId(String openId);
 }

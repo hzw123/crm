@@ -1,13 +1,11 @@
 package cn.mauth.crm.boss.shiro;
 
-
 import cn.mauth.crm.common.domain.SysLoginLog;
-import cn.mauth.crm.common.repository.SysLoginLogRepository;
-import cn.mauth.crm.common.repository.SysUserInfoRepository;
+import cn.mauth.crm.common.domain.SysRole;
 import cn.mauth.crm.common.domain.SysUserInfo;
-import cn.mauth.crm.util.common.HexUtil;
-import cn.mauth.crm.util.common.HttpUtil;
-import cn.mauth.crm.util.common.IpUtil;
+import cn.mauth.crm.common.service.SysLoginLogSerVice;
+import cn.mauth.crm.common.service.SysUserInfoService;
+import cn.mauth.crm.util.common.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -21,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 /**
  * 身份校验核心类
  */
@@ -30,10 +30,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 	private static final Logger log= LoggerFactory.getLogger(MyShiroRealm.class);
 
 	@Autowired
-	private SysUserInfoRepository sysUserInfoRepository;
+	private SysUserInfoService sysUserInfoService;
 
 	@Autowired
-	private SysLoginLogRepository sysLoginLogRepository;
+	private SysLoginLogSerVice sysLoginLogSerVice;
 
 	/**
 	 * 认证登陆
@@ -50,19 +50,21 @@ public class MyShiroRealm extends AuthorizingRealm {
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 
-		SysUserInfo sysUserInfo = sysUserInfoRepository.findByUserName(username);
-		
-		log.info("----->>userInfo=" + sysUserInfo.getUserName());
 
 		if(StringUtils.isEmpty(username)){
-			throw new UnknownAccountException("没有用户！");
+			throw new UnknownAccountException("openId为空！");
 		}
+
+		SysUserInfo sysUserInfo = sysUserInfoService.findByWxOpenId(username);
+
+		log.info("----->>openId=" + sysUserInfo.getWxOpenId());
+
 
 		if (null == sysUserInfo) {
 			throw new UnknownAccountException("账号不存在");
 		}
 
-		if (!sysUserInfo.getPwd().equals(HexUtil.md5Hex( password+sysUserInfo.getSalt()))) {
+		if (!sysUserInfo.getPassword().equals(HexUtil.md5Hex( password+sysUserInfo.getSalt()))) {
 			throw new UnknownAccountException("账号或者密码不正确");
 		}
 
@@ -71,23 +73,43 @@ public class MyShiroRealm extends AuthorizingRealm {
 		}
 
 		if(sysUserInfo.getStatus()==3){
-			throw new AuthenticationException("账户已注销");
+			throw new AuthenticationException("账号已注销");
 		}
 
-		if(sysUserInfo.isDelete()){
-			throw new AuthenticationException("账户已经删除");
+		if(sysUserInfo.isDisabled()){
+			throw new AuthenticationException("账号已经删除");
 		}
+
+		Set<SysRole> roles=sysUserInfo.getSysRoles();
+
+		if(roles==null||roles.size()==0){
+			throw new AuthenticationException("请添加角色");
+		}
+
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
 				username, // 用户名
 				password, // 密码
 				this.getName() // realm name
 		);
 
+		SessionUtil.saveUser(sysUserInfo);
+		SessionUtil.saveUserId(sysUserInfo.getId());
+		SessionUtil.saveRoles(sysUserInfo.getSysRoles());
+
+		boolean flag=false;
+		for (SysRole role: roles) {
+			if(role.getName().equals("admin")){
+				flag=true;
+				break;
+			}
+		}
+
+		SessionUtil.saveAdmin(flag);
+
 		this.addLoginLog(sysUserInfo);
 
 		return authenticationInfo;
 
-		
 	}
 	
 	 /**
@@ -124,9 +146,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 		sysLoginLog.setIp(IpUtil.getIp(HttpUtil.getRequest()));
 
-		sysLoginLog.setUserName(sysUserInfo.getUserName());
+		sysLoginLog.setOpenId(sysUserInfo.getWxOpenId());
 
-		sysLoginLogRepository.save(sysLoginLog);
+		sysLoginLogSerVice.add(sysLoginLog);
     }
 
 }

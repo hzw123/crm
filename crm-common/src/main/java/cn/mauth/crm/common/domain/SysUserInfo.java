@@ -13,14 +13,29 @@ public class SysUserInfo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(unique = true,nullable = false,length = 50)
-    private String userName;
+    @Column(nullable = false,length = 100)
+    private String appId;
 
-    @Column(nullable = false,length = 50)
-    private String pwd;
+    @Column(unique = true,nullable = false,length = 100)
+    private String wxOpenId;
+
+    @Column(nullable = false,length = 100)
+    private String sessionKey;
+
+    private String wxUnionId;
 
     @Column(nullable = false,length = 50)
     private String salt;
+
+    @Column(nullable = false,length = 50)
+    private String password;
+
+    private String realName;
+
+    private String nickName;
+
+    /**性别*/
+    private String gender;
 
     @Column(length = 11)
     private String phone;
@@ -37,23 +52,40 @@ public class SysUserInfo extends BaseEntity {
     /**状态*/
     private int status;
 
-    /**是否删除*/
-    private boolean isDelete;
+    /**是否显示*/
+    private boolean disabled;
 
-    public String getUserName() {
-        return userName;
+
+    public String getAppId() {
+        return appId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getWxOpenId() {
+        return wxOpenId;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setWxOpenId(String wxOpenId) {
+        this.wxOpenId = wxOpenId;
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
+
+    public String getWxUnionId() {
+        return wxUnionId;
+    }
+
+    public void setWxUnionId(String wxUnionId) {
+        this.wxUnionId = wxUnionId;
     }
 
     public String getSalt() {
@@ -62,6 +94,38 @@ public class SysUserInfo extends BaseEntity {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getPhone() {
@@ -80,14 +144,6 @@ public class SysUserInfo extends BaseEntity {
         this.email = email;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public Set<SysRole> getSysRoles() {
         return sysRoles;
     }
@@ -96,11 +152,19 @@ public class SysUserInfo extends BaseEntity {
         this.sysRoles = sysRoles;
     }
 
-    public boolean isDelete() {
-        return isDelete;
+    public int getStatus() {
+        return status;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

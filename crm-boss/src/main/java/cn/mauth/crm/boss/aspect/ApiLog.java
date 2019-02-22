@@ -2,6 +2,7 @@ package cn.mauth.crm.boss.aspect;
 
 import cn.mauth.crm.util.common.HttpUtil;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -17,9 +18,9 @@ import java.util.Arrays;
 @Component
 @Aspect
 @Order(1)
-public class Log {
+public class ApiLog {
 
-    private static final Logger log= LoggerFactory.getLogger(Log.class);
+    private static final Logger log= LoggerFactory.getLogger(ApiLog.class);
 
     private ThreadLocal<Long> threadLocal=new ThreadLocal<>();
 
@@ -46,9 +47,15 @@ public class Log {
         String type=request.getMethod();
 
         String method=joinPoint.getSignature().getName();
+
         String className=joinPoint.getSignature().getDeclaringTypeName();
-        String param= Arrays.toString(joinPoint.getArgs());
+
+        Object[] objects=joinPoint.getArgs();
+
+        String param= Arrays.toString(objects);
+
         long time=System.currentTimeMillis()-threadLocal.get();
+
         log.info("\n{\n\turi:{},\n\ttype:{},\n\tclassName:{}," +
                         "\n\tmethod:{},\n\tparam:{},\n\ttimeLong:{}\n}",
                 uri,type,className,method, param,time);

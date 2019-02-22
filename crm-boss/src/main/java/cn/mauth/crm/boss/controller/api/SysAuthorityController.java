@@ -4,20 +4,17 @@ import cn.mauth.crm.common.domain.SysAuthority;
 import cn.mauth.crm.common.service.SysAuthService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/auths")
-@Api("权限API")
+@ApiModel("权限API")
 public class SysAuthorityController extends BaseController{
 
     @Autowired
@@ -52,5 +49,32 @@ public class SysAuthorityController extends BaseController{
     public Result page(Pageable pageable){
 
         return ok(service.page(pageable));
+    }
+
+    @PostMapping
+    @ApiOperation("添加一个权限")
+    public Result error(SysAuthority sysAuthority) {
+        if(service.add(sysAuthority)){
+            return ok("添加成功");
+        }
+        return error("添加失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("修改权限")
+    public Result update(@PathVariable Long id,SysAuthority sysAuthority) {
+        if(service.add(sysAuthority)){
+            return ok("修改成功");
+        }
+        return error("修改失败");
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除权限")
+    public Result deleteBy(@PathVariable Long id) {
+        if(service.deleteById(id)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
     }
 }

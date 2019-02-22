@@ -4,20 +4,17 @@ import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.common.service.SysUserInfoService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/users")
-@Api("用户API")
+@ApiModel("用户API")
 public class SysUserInfoController extends BaseController{
 
     @Autowired
@@ -30,7 +27,7 @@ public class SysUserInfoController extends BaseController{
         if(user==null){
             return error("没有找到id为"+id+"的用户");
         }
-        if(user.isDelete()){
+        if(user.isDisabled()){
             return error("用户id:"+id+"已经删除");
         }
         return ok(user);
@@ -38,7 +35,7 @@ public class SysUserInfoController extends BaseController{
 
     @GetMapping
     @ApiOperation("根据角色获得用户列表")
-    public Result getAdministratorList(String type){
+    public Result getAdministratorList(@RequestParam(value = "type") String type){
 
         List<SysUserInfo> list=service.findAdminList(type);
 
@@ -50,8 +47,17 @@ public class SysUserInfoController extends BaseController{
     }
 
     @GetMapping("/page")
-    @ApiOperation("分页获得用户列表")
+    @ApiOperation("分页获得用户信息")
     public Result getAdministratorList(Pageable pageable){
         return ok(service.page(pageable));
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除用户信息")
+    public Result delete(@PathVariable Long id){
+        if(service.noDisabled(id)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
     }
 }

@@ -21,11 +21,13 @@ public final class Constants {
 		public final static String USER_TYPE = "crm_mauth_cn_user_type";
 		public final static String USER_ID = "crm_mauth_cn_user_info_id";
 		public final static String USER = "crm_mauth_cn_user";
+		public final static String ADMIN = "crm_mauth_cn_admin";
 		public final static String MENU = "crm_mauth_cn_menu";
 		public final static String PERMISSIONS = "crm_mauth_cn_Permissions";
 		public final static String ROLE = "crm_mauth_cn_role";
 		public final static String ACCOUNT = "crm_mauth_cn_account";
 		public final static String SESSION_INDEX = "crm_mauth_cn_sessionIndex";
+
 	}
 
 	public interface Redis {

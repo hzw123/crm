@@ -28,6 +28,12 @@ spring:
       authc: /authc
       user: /**
 
+
+img:
+  local:
+    path:
+  host:
+
 logging:
   file: ./log/${spring.application.name}.log
 

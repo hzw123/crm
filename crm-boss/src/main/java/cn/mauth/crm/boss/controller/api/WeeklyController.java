@@ -1,12 +1,10 @@
 package cn.mauth.crm.boss.controller.api;
 
-import cn.mauth.crm.common.domain.Visit;
 import cn.mauth.crm.common.domain.Weekly;
-import cn.mauth.crm.common.service.VisitService;
 import cn.mauth.crm.common.service.WeeklySerVice;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/weeklys")
-@Api("周报API")
+@ApiModel("周报API")
 public class WeeklyController extends BaseController{
 
     @Autowired

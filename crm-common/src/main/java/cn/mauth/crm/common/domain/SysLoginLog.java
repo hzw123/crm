@@ -1,6 +1,7 @@
 package cn.mauth.crm.common.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
  * 登录日志
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class SysLoginLog implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -23,8 +25,11 @@ public class SysLoginLog implements Serializable{
     @Column(updatable = false,columnDefinition = "datetime")
     private Date loginAt;
 
-    /**用户名*/
-    private String userName;
+    /**openId*/
+    private String openId;
+
+    /**用户Id*/
+    private Long userId;
 
     /**IP地址*/
     private String ip;
@@ -48,12 +53,20 @@ public class SysLoginLog implements Serializable{
         this.loginAt = loginAt;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getIp() {

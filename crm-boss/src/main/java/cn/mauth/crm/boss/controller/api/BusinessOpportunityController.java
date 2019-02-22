@@ -4,7 +4,7 @@ import cn.mauth.crm.common.domain.BusinessOpportunity;
 import cn.mauth.crm.common.service.BusiService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/bus")
-@Api("商机API")
+@ApiModel("商机API")
 public class BusinessOpportunityController extends BaseController{
 
     @Autowired
@@ -49,6 +49,15 @@ public class BusinessOpportunityController extends BaseController{
     public Result page(Pageable pageable){
 
         return ok(service.page(pageable));
+    }
+
+    @PostMapping
+    @ApiOperation("添加一个商机")
+    public Result error(BusinessOpportunity businessOpportunity) {
+        if(service.add(businessOpportunity)){
+            return ok("添加成功");
+        }
+        return error("添加失败");
     }
 
     @PutMapping("/{id}")
