@@ -1,13 +1,11 @@
 package cn.mauth.crm.common.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  *小程序配置
  */
 @ConfigurationProperties("wxapp")
-@Component
 public class WxAuth {
 
     private String appId;

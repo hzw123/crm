@@ -1,10 +1,12 @@
 package cn.mauth.crm.boss.controller.api;
 
+import cn.mauth.crm.common.bean.SessionInfo;
 import cn.mauth.crm.common.service.RedisService;
 import cn.mauth.crm.common.service.WxService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.AES;
 import cn.mauth.crm.util.common.Result;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiModel;;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -79,9 +81,13 @@ public class WxAuthController extends BaseController{
 
         String wxSessionStr = (String) wxSessionObj;
 
-        String sessionKey = wxSessionStr.split("#")[0];
+        SessionInfo sessionInfo = JSON.parseObject(wxSessionStr, SessionInfo.class);
 
-        byte[] encryData = DigestUtils.sha1(sessionKey);
+        if(sessionInfo==null){
+            return error("错误");
+        }
+
+        byte[] encryData = DigestUtils.sha1(sessionInfo.getSessionKey());
 
         byte[] signatureData = signature.getBytes();
 
@@ -111,12 +117,15 @@ public class WxAuthController extends BaseController{
         }
 
         String wxSessionStr = (String) wxSessionObj;
-        String sessionKey = wxSessionStr.split("#")[0];
+        SessionInfo sessionInfo = JSON.parseObject(wxSessionStr, SessionInfo.class);
 
+        if(sessionInfo==null){
+            return error("错误");
+        }
         try {
             AES aes = new AES();
 
-            byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionKey), Base64.decodeBase64(iv));
+            byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionInfo.getSessionKey()), Base64.decodeBase64(iv));
 
             if(null != resultByte && resultByte.length > 0){
 

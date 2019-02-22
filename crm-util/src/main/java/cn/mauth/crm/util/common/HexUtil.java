@@ -19,7 +19,7 @@ public class HexUtil {
         return encodeHexStr(result,true);
     }
 
-    public static String encodeHexStr(byte[] data, boolean toLowerCase) {
+    private static String encodeHexStr(byte[] data, boolean toLowerCase) {
         return encodeHexStr(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
     }
 

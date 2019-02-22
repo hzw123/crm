@@ -58,7 +58,7 @@ public class RedisService {
      * 添加Map
      */
     public boolean add(final Map<String,String> map) {
-        Assert.notEmpty(map);
+        Assert.notEmpty(map,"");
 
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)

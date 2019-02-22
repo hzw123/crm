@@ -1,7 +1,10 @@
 package cn.mauth.crm.common.service;
 
+import cn.mauth.crm.common.domain.SysRole;
 import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.common.properties.WxAuth;
+import cn.mauth.crm.common.bean.SessionInfo;
+import cn.mauth.crm.util.common.HexUtil;
 import cn.mauth.crm.util.common.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.RandomStringUtils;
@@ -62,23 +65,38 @@ public class WxService {
      * @return
      */
     public String create3rdSession(String wxOpenId, String wxSessionKey, Long expires){
-
+        SysUserInfo userInfo=null;
         if(!sysUserInfoService.existByWxOpenId(wxOpenId)){
-            SysUserInfo userInfo=new SysUserInfo();
+            userInfo=new SysUserInfo();
 
             userInfo.setAppId(wxAuth.getAppId());
             userInfo.setWxOpenId(wxOpenId);
-            userInfo.setWxOpenId(wxOpenId);
+            userInfo.setSalt(RandomStringUtils.randomAlphanumeric(32));
+            userInfo.setPassword(HexUtil.md5Hex("123456"+userInfo.getSalt()));
+            userInfo.setSessionKey(wxSessionKey);
 
+            sysUserInfoService.add(userInfo);
         }
 
         String thirdSessionKey = RandomStringUtils.randomAlphanumeric(64);
 
-        StringBuffer sb = new StringBuffer();
+        SessionInfo sessionInfo=new SessionInfo();
 
-        sb.append(wxSessionKey).append("#").append(wxOpenId);
+        userInfo=sysUserInfoService.findByWxOpenId(wxOpenId);
 
-        redisService.add(thirdSessionKey, expires, sb.toString());
+        sessionInfo.setOpenId(wxOpenId);
+        sessionInfo.setSessionKey(wxSessionKey);
+        sessionInfo.setUserId(userInfo.getId());
+        sessionInfo.setUser(userInfo);
+
+        for (SysRole role:userInfo.getSysRoles()) {
+            if(role.getName().equals("admin")){
+                sessionInfo.setAdmin(true);
+                break;
+            }
+        }
+
+        redisService.add(thirdSessionKey, expires, JSON.toJSONString(sessionInfo));
 
         return thirdSessionKey;
     }
