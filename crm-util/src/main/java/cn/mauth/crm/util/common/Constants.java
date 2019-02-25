@@ -7,7 +7,10 @@ package cn.mauth.crm.util.common;
  */
 public final class Constants {
 
-	public final static String ADMIN = "超级管理员";
+	public final static String ADMIN = "admin";
+	public final static String MANAGErR= "manager";
+	public final static String SELL = "sell";
+	public final static String SESSIN_ID = "sessionId";
 
 	private Constants() {
 	}
@@ -26,7 +29,6 @@ public final class Constants {
 		public final static String PERMISSIONS = "crm_mauth_cn_Permissions";
 		public final static String ROLE = "crm_mauth_cn_role";
 		public final static String ACCOUNT = "crm_mauth_cn_account";
-		public final static String SESSION_INDEX = "crm_mauth_cn_sessionIndex";
 
 	}
 

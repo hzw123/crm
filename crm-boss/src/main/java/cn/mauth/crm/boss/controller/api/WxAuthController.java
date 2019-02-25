@@ -6,8 +6,7 @@ import cn.mauth.crm.common.service.WxService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.AES;
 import cn.mauth.crm.util.common.Result;
-import com.alibaba.fastjson.JSON;
-import io.swagger.annotations.ApiModel;;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -60,6 +59,7 @@ public class WxAuthController extends BaseController{
     }
 
 
+
     /**
      * 验证用户信息完整性
      * @param rawData	微信用户基本信息
@@ -69,25 +69,15 @@ public class WxAuthController extends BaseController{
      */
     @GetMapping(value = "/checkUserInfo", produces = "application/json")
     @ApiOperation("验证用户信息完整性API")
-    public Result checkUserInfo(@RequestParam(value = "rawData") String rawData,
-                                            @RequestParam(value = "signature") String signature,
-                                            @RequestParam(value = "sessionId") String sessionId){
+    public Result checkUserInfo( String rawData, String signature, String sessionId){
 
-        Object wxSessionObj = redisService.get(sessionId);
+        SessionInfo sessionInfo = redisService.getSessionInfo(sessionId);
 
-        if(null == wxSessionObj){
+        if(null == sessionInfo){
             return Result.of(40008, null);
         }
 
-        String wxSessionStr = (String) wxSessionObj;
-
-        SessionInfo sessionInfo = JSON.parseObject(wxSessionStr, SessionInfo.class);
-
-        if(sessionInfo==null){
-            return error("错误");
-        }
-
-        byte[] encryData = DigestUtils.sha1(sessionInfo.getSessionKey());
+        byte[] encryData = DigestUtils.sha1(rawData+sessionInfo.getSessionKey());
 
         byte[] signatureData = signature.getBytes();
 
@@ -106,22 +96,14 @@ public class WxAuthController extends BaseController{
      */
     @GetMapping(value = "/decodeUserInfo", produces = "application/json")
     @ApiOperation("获取用户openId和unionId数据")
-    public Result decodeUserInfo(@RequestParam(value = "encryptedData") String encryptedData,
-                                             @RequestParam(value = "iv") String iv,
-                                             @RequestParam(value = "sessionId") String sessionId){
+    public Result decodeUserInfo( String encryptedData, String iv, String sessionId){
         //从缓存中获取session_key
-        Object wxSessionObj = redisService.get(sessionId);
+        SessionInfo sessionInfo = redisService.getSessionInfo(sessionId);
 
-        if(null == wxSessionObj){
+        if(null == sessionInfo){
             return Result.of(40008, null);
         }
 
-        String wxSessionStr = (String) wxSessionObj;
-        SessionInfo sessionInfo = JSON.parseObject(wxSessionStr, SessionInfo.class);
-
-        if(sessionInfo==null){
-            return error("错误");
-        }
         try {
             AES aes = new AES();
 

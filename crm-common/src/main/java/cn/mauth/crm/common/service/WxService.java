@@ -1,15 +1,13 @@
 package cn.mauth.crm.common.service;
 
+import cn.mauth.crm.common.domain.SysLoginLog;
 import cn.mauth.crm.common.domain.SysRole;
 import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.common.properties.WxAuth;
 import cn.mauth.crm.common.bean.SessionInfo;
-import cn.mauth.crm.util.common.HexUtil;
-import cn.mauth.crm.util.common.HttpRequest;
+import cn.mauth.crm.util.common.*;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +15,6 @@ import java.util.Map;
 
 @Service
 public class WxService {
-
-    private final static Logger log= LoggerFactory.getLogger(WxService.class);
 
     @Autowired
     private WxAuth wxAuth;
@@ -46,8 +42,6 @@ public class WxService {
 
         sb.append("&js_code=").append(wxCode);
 
-        sb.append("&grant_type=").append(wxAuth.getGrantType());
-
         String res = HttpRequest.sendGet(wxAuth.getSessionHost(), sb.toString());
 
         if(res == null || res.equals("")){
@@ -66,6 +60,7 @@ public class WxService {
      */
     public String create3rdSession(String wxOpenId, String wxSessionKey, Long expires){
         SysUserInfo userInfo=null;
+
         if(!sysUserInfoService.existByWxOpenId(wxOpenId)){
             userInfo=new SysUserInfo();
 
@@ -90,7 +85,7 @@ public class WxService {
         sessionInfo.setUser(userInfo);
 
         for (SysRole role:userInfo.getSysRoles()) {
-            if(role.getName().equals("admin")){
+            if(role.getName().equals(Constants.ADMIN)){
                 sessionInfo.setAdmin(true);
                 break;
             }
@@ -98,7 +93,26 @@ public class WxService {
 
         redisService.add(thirdSessionKey, expires, JSON.toJSONString(sessionInfo));
 
+        this.addLoginLog(thirdSessionKey,wxOpenId,userInfo.getId());
+
         return thirdSessionKey;
+    }
+
+    /**
+     *  添加登录日志
+     * @param sessionId
+     */
+    private void addLoginLog(String sessionId,String openId,Long userId){
+
+        SysLoginLog sysLoginLog=new SysLoginLog();
+
+        sysLoginLog.setSessionId(sessionId);
+
+        sysLoginLog.setOpenId(openId);
+
+        sysLoginLog.setUserId(userId);
+
+        sysLoginLog.setIp(IpUtil.getIp(HttpUtil.getRequest()));
     }
 
 

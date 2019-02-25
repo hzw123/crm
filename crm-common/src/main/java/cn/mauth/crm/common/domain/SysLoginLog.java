@@ -34,6 +34,8 @@ public class SysLoginLog implements Serializable{
     /**IP地址*/
     private String ip;
 
+    private String sessionId;
+
     /**备注*/
     private String remark;
 
@@ -75,6 +77,14 @@ public class SysLoginLog implements Serializable{
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getRemark() {

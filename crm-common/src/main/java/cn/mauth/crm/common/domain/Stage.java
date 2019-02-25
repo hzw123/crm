@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**商机*/
+/**阶段*/
 @Entity
 public class Stage implements Serializable{
 

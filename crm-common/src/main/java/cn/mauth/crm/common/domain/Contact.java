@@ -50,7 +50,7 @@ public class Contact extends BaseEntity{
     private String interest;
 
     /**所属客户ID*/
-    private Long clientId;
+    private Long accountId;
 
     /**来源*/
     @Column(nullable = false)
@@ -136,12 +136,12 @@ public class Contact extends BaseEntity{
         this.interest = interest;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public String getSource() {

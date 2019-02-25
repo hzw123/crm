@@ -12,17 +12,14 @@ public class WxAuth {
 
     private String secret;
 
-    private String grantType;
-
     private String sessionHost;
 
     public WxAuth() {
     }
 
-    public WxAuth(String appId, String secret, String grantType, String sessionHost) {
+    public WxAuth(String appId, String secret, String sessionHost) {
         this.appId = appId;
         this.secret = secret;
-        this.grantType = grantType;
         this.sessionHost = sessionHost;
     }
 
@@ -40,14 +37,6 @@ public class WxAuth {
 
     public void setSecret(String secret) {
         this.secret = secret;
-    }
-
-    public String getGrantType() {
-        return grantType;
-    }
-
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
     }
 
     public String getSessionHost() {

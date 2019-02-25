@@ -52,6 +52,15 @@ public class SysUserInfoController extends BaseController{
         return ok(service.page(pageable));
     }
 
+    @PutMapping("/{id}")
+    @ApiOperation("修改用户信息")
+    public Result update(@PathVariable Long id,SysUserInfo sysUserInfo){
+        if(service.update(sysUserInfo)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
+    }
+
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户信息")
     public Result delete(@PathVariable Long id){

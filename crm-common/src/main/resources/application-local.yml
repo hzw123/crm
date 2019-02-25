@@ -46,6 +46,5 @@ spring:
 
 wxapp:
   sessionHost: https://api.weixin.qq.com/sns/jscode2session
-  appId: 12323
-  secret: 41fewwrw34353
-  grantType: authorization_code
+  appId: wx461ca88287929a3a
+  secret: cbaefb7616eed3d967b8079da9aebc60

@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/crm/v1/bus")
-@ApiModel("商机API")
+@ApiModel("商机管理")
 public class BusinessOpportunityController extends BaseController{
 
     @Autowired
@@ -34,9 +34,9 @@ public class BusinessOpportunityController extends BaseController{
 
     @GetMapping
     @ApiOperation("查询所有商机")
-    public Result findAll(){
+    public Result findAll(Long accountId,int status,String state){
 
-        List<BusinessOpportunity> list=service.findAll();
+        List<BusinessOpportunity> list=service.findAll(accountId,status,state);
 
         if(list==null || list.size()==0)
             return error("还没有的商机");
@@ -46,9 +46,9 @@ public class BusinessOpportunityController extends BaseController{
 
     @GetMapping("/page")
     @ApiOperation("分页查询商机")
-    public Result page(Pageable pageable){
+    public Result page(Long accountId,int status,String state,Pageable pageable){
 
-        return ok(service.page(pageable));
+        return ok(service.page(accountId,status,state,pageable));
     }
 
     @PostMapping
@@ -61,7 +61,7 @@ public class BusinessOpportunityController extends BaseController{
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("根据id修改合同状态")
+    @ApiOperation("根据id修改商机状态")
     public Result updateStatus(@PathVariable Long id,Integer status) {
 
         if(service.updateStatus(id,status)){
@@ -73,7 +73,7 @@ public class BusinessOpportunityController extends BaseController{
 
 
     @DeleteMapping("/{id}")
-    @ApiOperation("根据id修改合同状态")
+    @ApiOperation("根据id删除商机")
     public Result deleteById(@PathVariable Long id) {
 
         service.deleteById(id);

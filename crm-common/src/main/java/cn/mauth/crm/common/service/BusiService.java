@@ -6,9 +6,12 @@ import cn.mauth.crm.common.domain.Stage;
 import cn.mauth.crm.common.repository.BusRecordRepository;
 import cn.mauth.crm.common.repository.BusinessOpportunityRepository;
 import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.util.common.PageUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,4 +97,27 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
     }
 
 
+    public Page<BusinessOpportunity> page(Long accountId,int status,String state,Pageable pageable) {
+        return repository.findAll(this.specification(accountId,status,state), PageUtil.getPageable(pageable));
+    }
+
+    public List<BusinessOpportunity> findAll(Long accountId,int status,String state) {
+        return repository.findAll(this.specification(accountId,status,state));
+    }
+
+    private Specification<BusinessOpportunity> specification(Long accountId,int status,String state){
+        return (root, query, cb) -> {
+            List<Predicate> list=new ArrayList<>();
+
+            if(accountId!=null&&accountId>=0)
+                list.add(cb.equal(root.get("accountId"),accountId));
+
+            list.add(cb.equal(root.get("status"),status));
+
+            if(StringUtils.isNotEmpty(state))
+                list.add(cb.equal(root.join("state").get("name"),state));
+
+            return cb.and(list.toArray(new Predicate[list.size()]));
+        };
+    }
 }

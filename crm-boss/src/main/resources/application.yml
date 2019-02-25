@@ -16,19 +16,6 @@ spring:
   profiles:
     active: local
 
-#shiro
-  shiro:
-    login-url: /login
-    success-url: /
-    unauthorized-url: /403
-    filter-chain-definition-map:
-      anon: /login,/swagger*/**,/v2/api-docs
-      logout: /logout #退出
-      #需要认证的路径
-      authc: /authc
-      user: /**
-
-
 img:
   local:
     path:

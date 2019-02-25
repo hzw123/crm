@@ -1,5 +1,10 @@
 package cn.mauth.crm.common.service;
 
+import cn.mauth.crm.common.bean.SessionInfo;
+import cn.mauth.crm.util.common.Constants;
+import cn.mauth.crm.util.common.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -135,5 +140,27 @@ public class RedisService {
             }
         });
         return result;
+    }
+
+    public SessionInfo getSessionInfo(String sessionId){
+        String json=(String) this.get(sessionId);
+        if(StringUtils.isNotEmpty(json)){
+            return JSON.parseObject(json,SessionInfo.class);
+        }
+        return null;
+    }
+
+    public SessionInfo getSessionInfo(){
+        return this.getSessionInfo(HttpUtil.getRequest().getParameter(Constants.SESSIN_ID));
+    }
+
+    public Long getUserId(){
+        SessionInfo sessionInfo=this.getSessionInfo();
+        return sessionInfo==null?null:sessionInfo.getUserId();
+    }
+
+    public boolean isAdmin(){
+        SessionInfo sessionInfo=this.getSessionInfo();
+        return sessionInfo==null?false:sessionInfo.isAdmin();
     }
 }

@@ -34,9 +34,9 @@ public class ContactController extends BaseController{
 
     @GetMapping
     @ApiOperation("查询所有联系人信息")
-    public Result findAll(){
+    public Result findAll(Contact contact){
 
-        List<Contact> list=service.findAll();
+        List<Contact> list=service.findAll(contact);
 
         if(list==null || list.size()==0)
             return error("还没有联系人信息");
@@ -46,9 +46,9 @@ public class ContactController extends BaseController{
 
     @GetMapping("/page")
     @ApiOperation("分页查询联系人信息")
-    public Result page(Pageable pageable){
+    public Result page(Contact contact,Pageable pageable){
 
-        return ok(service.page(pageable));
+        return ok(service.page(contact,pageable));
     }
 
     @PostMapping

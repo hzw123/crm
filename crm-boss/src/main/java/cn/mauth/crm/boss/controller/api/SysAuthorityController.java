@@ -63,7 +63,7 @@ public class SysAuthorityController extends BaseController{
     @PutMapping("/{id}")
     @ApiOperation("修改权限")
     public Result update(@PathVariable Long id,SysAuthority sysAuthority) {
-        if(service.add(sysAuthority)){
+        if(service.update(sysAuthority)){
             return ok("修改成功");
         }
         return error("修改失败");

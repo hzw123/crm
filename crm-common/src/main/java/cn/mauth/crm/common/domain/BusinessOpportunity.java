@@ -19,7 +19,7 @@ public class BusinessOpportunity extends BaseEntity{
     private String source;
 
     /**所属客户Id*/
-    private Long clientId;
+    private Long accountId;
 
     /**联系人*/
     @OneToMany
@@ -52,12 +52,12 @@ public class BusinessOpportunity extends BaseEntity{
         this.source = source;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Set<Contact> getContacts() {

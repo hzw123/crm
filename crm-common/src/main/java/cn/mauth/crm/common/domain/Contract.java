@@ -31,7 +31,7 @@ public class Contract extends BaseEntity{
     private String title;
 
     /**所属客户Id*/
-    private Long clientId;
+    private Long accountId;
 
     /**所属商机ID*/
     private Long busId;
@@ -89,12 +89,12 @@ public class Contract extends BaseEntity{
         this.title = title;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Long getBusId() {

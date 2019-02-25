@@ -43,7 +43,7 @@ public class Visit extends BaseEntity{
     private String content;
 
     /**客户Id*/
-    private Long clientId;
+    private Long accountId;
 
     /**联系人Id*/
     private Long contactId;
@@ -107,12 +107,12 @@ public class Visit extends BaseEntity{
         this.content = content;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Long getContactId() {

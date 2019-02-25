@@ -1,10 +1,10 @@
 package cn.mauth.crm.common.repository;
 
-import cn.mauth.crm.common.domain.Client;
+import cn.mauth.crm.common.domain.Account;
 import cn.mauth.crm.util.base.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientRepository extends BaseRepository<Client,Long> {
+public interface AccountRepository extends BaseRepository<Account,Long> {
 
 }

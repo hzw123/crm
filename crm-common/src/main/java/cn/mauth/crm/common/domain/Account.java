@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * 客户
  */
 @Entity
-public class Client extends BaseEntity{
+public class Account extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
 

@@ -61,4 +61,5 @@ public class SysUserInfoService extends BaseService<SysUserInfoRepository,SysUse
         return repository.countByWxOpenId(openId)>0;
     }
 
+
 }

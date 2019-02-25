@@ -3,7 +3,6 @@ package cn.mauth.crm.common.service;
 import cn.mauth.crm.common.domain.SysLoginLog;
 import cn.mauth.crm.common.repository.SysLoginLogRepository;
 import cn.mauth.crm.util.common.PageUtil;
-import cn.mauth.crm.util.common.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,9 @@ public class SysLoginLogSerVice {
 
     @Autowired
     private SysLoginLogRepository repository;
+
+    @Autowired
+    private RedisService redisService;
 
     private final static Logger log= LoggerFactory.getLogger(SysLoginLog.class);
 
@@ -43,8 +45,8 @@ public class SysLoginLogSerVice {
         return repository.findAll((root, query, cb) -> {
             List<Predicate> list=new ArrayList<>();
 
-            if(!SessionUtil.isAdmin()){
-                list.add(cb.equal(root.get("userId"),SessionUtil.getUserId()));
+            if(!redisService.isAdmin()){
+                list.add(cb.equal(root.get("userId"),redisService.getUserId()));
             }
 
             return cb.and(list.toArray(new Predicate[list.size()]));
@@ -53,8 +55,8 @@ public class SysLoginLogSerVice {
 
     public List<SysLoginLog> findAll(){
         return repository.findAll((root, query, cb) -> {
-            if(!SessionUtil.isAdmin()){
-                return cb.equal(root.get("userId"),SessionUtil.getUserId());
+            if(!redisService.isAdmin()){
+                return cb.equal(root.get("userId"),redisService.getUserId());
             }
             return null;
         });

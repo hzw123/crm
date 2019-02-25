@@ -1,6 +1,5 @@
 package cn.mauth.crm.boss.controller.api;
 
-import cn.mauth.crm.common.domain.Contact;
 import cn.mauth.crm.common.domain.Contract;
 import cn.mauth.crm.common.service.ContractService;
 import cn.mauth.crm.util.base.BaseController;
@@ -35,9 +34,10 @@ public class ContractController extends BaseController{
 
     @GetMapping
     @ApiOperation("查询所有合同")
-    public Result findAll(){
+    public Result findAll(String name,String code,String type, String title,
+                          Long accountId,Long busId){
 
-        List<Contract> list=service.findAll();
+        List<Contract> list=service.findAll(name, code, type, title, accountId, busId);
 
         if(list==null || list.size()==0)
             return error("还没有合同");
@@ -47,9 +47,10 @@ public class ContractController extends BaseController{
 
     @GetMapping("/page")
     @ApiOperation("分页查询合同")
-    public Result page(Pageable pageable){
+    public Result page(String name,String code,String type, String title,
+                       Long accountId,Long busId,Pageable pageable){
 
-        return ok(service.page(pageable));
+        return ok(service.page(name,code,type,title,accountId,busId,pageable));
     }
 
 
@@ -65,7 +66,7 @@ public class ContractController extends BaseController{
     @PutMapping("/{id}")
     @ApiOperation("修改合同")
     public Result update(@PathVariable Long id,Contract contract) {
-        if(service.add(contract)){
+        if(service.update(contract)){
             return ok("修改成功");
         }
         return error("修改失败");

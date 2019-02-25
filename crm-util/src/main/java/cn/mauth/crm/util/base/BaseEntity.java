@@ -27,15 +27,12 @@ public abstract class BaseEntity implements Serializable{
     protected Date updateAt;
 
     /**创建者*/
-    @Column(nullable = false)
     private String creator;
 
     /**修改者*/
-    @Column(nullable = false)
     private String modified;
 
     /**所有者*/
-    @Column(nullable = false)
     private String owner;
 
     /**备注*/
