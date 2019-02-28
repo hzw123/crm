@@ -3,6 +3,7 @@ package cn.mauth.crm.common.domain;
 import cn.mauth.crm.util.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -13,34 +14,35 @@ public class SysUserInfo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false,length = 100)
     private String appId;
 
-    @Column(unique = true,nullable = false,length = 100)
+    /**微信openId*/
     private String wxOpenId;
 
-    @Column(nullable = false,length = 100)
+    /**微信sessionKey*/
     private String sessionKey;
 
+    /**微信UnionId*/
     private String wxUnionId;
 
-    @Column(nullable = false,length = 50)
+    /**手机号*/
+    private String phone;
+
+    @Column(nullable = false)
     private String salt;
 
-    @Column(nullable = false,length = 50)
+    /**加密后的密码*/
     private String password;
 
+    /**真实姓名*/
     private String realName;
-
+    /**昵称*/
     private String nickName;
 
     /**性别*/
     private String gender;
 
-    @Column(length = 11)
-    private String phone;
-
-    @Column(length = 50)
+    /**邮箱*/
     private String email;
 
     @ManyToMany
@@ -51,6 +53,10 @@ public class SysUserInfo extends BaseEntity {
 
     /**状态*/
     private int status;
+
+    /**入职时间*/
+    @Column(columnDefinition = "datetime")
+    private Date hireDate;
 
     /**是否显示*/
     private boolean disabled;
@@ -158,6 +164,14 @@ public class SysUserInfo extends BaseEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Date getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(Date hireDate) {
+        this.hireDate = hireDate;
     }
 
     public boolean isDisabled() {

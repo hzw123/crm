@@ -14,7 +14,6 @@ public class SysRole extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**名称*/
-    @Column(unique = true,updatable = false,length = 20)
     private String name;
 
     /**状态*/

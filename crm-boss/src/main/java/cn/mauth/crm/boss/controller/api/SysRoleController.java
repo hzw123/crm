@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,5 +46,32 @@ public class SysRoleController extends BaseController{
         if(role==null)
             return ok("没有找到id为"+id+"的角色");
         return ok(role);
+    }
+
+    @PostMapping
+    @ApiOperation("添加角色信息")
+    public Result add(SysRole sysRole){
+        if(service.add(sysRole)){
+            return ok("添加成功");
+        }
+        return ok("添加失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("通过id修给角色信息")
+    public Result update(@PathVariable Long id, SysRole sysRole){
+        if(service.update(sysRole)){
+            return ok("修改成功");
+        }
+        return ok("修改失败");
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("通过id删除角色信息")
+    public Result deleteById(@PathVariable Long id){
+        if(service.deleteById(id)){
+            return ok("删除成功");
+        }
+        return ok("删除失败");
     }
 }

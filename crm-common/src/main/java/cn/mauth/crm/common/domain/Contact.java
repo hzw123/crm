@@ -2,7 +2,6 @@ package cn.mauth.crm.common.domain;
 
 import cn.mauth.crm.util.base.BaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -14,27 +13,21 @@ public class Contact extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**名字*/
-    @Column(nullable = false,length = 50)
     private String name;
 
     /**电话*/
-    @Column(unique = true,nullable = false,length = 11)
     private String telephone ;
 
     /**手机*/
-    @Column(unique = true,nullable = false,length = 11)
     private String phone;
 
     /**部门*/
-    @Column(nullable = false,length = 100)
     private String department;
 
     /**职位*/
-    @Column(nullable = false,length = 100)
     private String job;
 
     /**上级*/
-    @Column(nullable = false,length = 100)
     private String superior;
 
     /**邮箱*/
@@ -53,7 +46,6 @@ public class Contact extends BaseEntity{
     private Long accountId;
 
     /**来源*/
-    @Column(nullable = false)
     private String source;
 
     public String getName() {

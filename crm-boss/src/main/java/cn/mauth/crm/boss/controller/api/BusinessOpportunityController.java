@@ -1,6 +1,7 @@
 package cn.mauth.crm.boss.controller.api;
 
 import cn.mauth.crm.common.domain.BusinessOpportunity;
+import cn.mauth.crm.common.domain.Stage;
 import cn.mauth.crm.common.service.BusiService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
@@ -53,18 +54,29 @@ public class BusinessOpportunityController extends BaseController{
 
     @PostMapping
     @ApiOperation("添加一个商机")
-    public Result error(BusinessOpportunity businessOpportunity) {
+    public Result add(BusinessOpportunity businessOpportunity) {
         if(service.add(businessOpportunity)){
             return ok("添加成功");
         }
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/status")
     @ApiOperation("根据id修改商机状态")
     public Result updateStatus(@PathVariable Long id,Integer status) {
 
         if(service.updateStatus(id,status)){
+            return ok("修改成功");
+        }
+
+        return error("修改失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("根据id修改商机")
+    public Result update(@PathVariable Long id,BusinessOpportunity businessOpportunity) {
+
+        if(service.update(businessOpportunity)){
             return ok("修改成功");
         }
 
@@ -81,4 +93,27 @@ public class BusinessOpportunityController extends BaseController{
         return ok("删除id:"+id+"成功");
     }
 
+    @GetMapping("/{id}/record")
+    @ApiOperation("查询商机Id的所有记录")
+    public Result record(@PathVariable Long id) {
+
+        service.findRecord(id);
+
+        return ok("删除id:"+id+"成功");
+    }
+
+    @GetMapping("/{id}/record/page")
+    @ApiOperation("根据商机Id分页查询记录")
+    public Result recordPage(@PathVariable Long id,Pageable pageable) {
+
+        service.pageRecord(id,pageable);
+
+        return ok("删除id:"+id+"成功");
+    }
+
+    @GetMapping("/statistics/{userId}")
+    @ApiOperation("统计用户个人的数据")
+    public Result statistics(@PathVariable Long userId) {
+        return ok(service.statistics(userId));
+    }
 }

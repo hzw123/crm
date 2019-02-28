@@ -20,20 +20,20 @@ public abstract class BaseEntity implements Serializable{
 
     @CreatedDate
     @Column(columnDefinition = "datetime")
-    protected Date crateAt;
+    protected Date createAt;
 
     @LastModifiedDate
     @Column(columnDefinition = "datetime")
     protected Date updateAt;
 
-    /**创建者*/
-    private String creator;
+    /**创建者Id*/
+    private String creatorId;
 
-    /**修改者*/
-    private String modified;
+    /**修改者Id*/
+    private String modifiedId;
 
-    /**所有者*/
-    private String owner;
+    /**所有者Id*/
+    private String ownerId;
 
     /**备注*/
     @Column(columnDefinition = "text")
@@ -47,12 +47,12 @@ public abstract class BaseEntity implements Serializable{
         this.id = id;
     }
 
-    public Date getCrateAt() {
-        return crateAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCrateAt(Date crateAt) {
-        this.crateAt = crateAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {
@@ -63,28 +63,28 @@ public abstract class BaseEntity implements Serializable{
         this.updateAt = updateAt;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public String getModified() {
-        return modified;
+    public String getModifiedId() {
+        return modifiedId;
     }
 
-    public void setModified(String modified) {
-        this.modified = modified;
+    public void setModifiedId(String modifiedId) {
+        this.modifiedId = modifiedId;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getRemark() {

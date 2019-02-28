@@ -6,6 +6,7 @@ import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.common.properties.WxAuth;
 import cn.mauth.crm.common.bean.SessionInfo;
 import cn.mauth.crm.util.common.*;
+import cn.mauth.crm.util.enums.LoginEnum;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class WxService {
 
     @Autowired
     private SysUserInfoService sysUserInfoService;
+
+    @Autowired
+    private SysLoginLogSerVice sysLoginLogSerVice;
 
 
     /**
@@ -67,7 +71,7 @@ public class WxService {
             userInfo.setAppId(wxAuth.getAppId());
             userInfo.setWxOpenId(wxOpenId);
             userInfo.setSalt(RandomStringUtils.randomAlphanumeric(32));
-            userInfo.setPassword(HexUtil.md5Hex("123456"+userInfo.getSalt()));
+            userInfo.setPassword(HexUtil.md5Hex(userInfo.getSalt()+"123456"));
             userInfo.setSessionKey(wxSessionKey);
 
             sysUserInfoService.add(userInfo);
@@ -75,9 +79,10 @@ public class WxService {
 
         String thirdSessionKey = RandomStringUtils.randomAlphanumeric(64);
 
-        SessionInfo sessionInfo=new SessionInfo();
 
         userInfo=sysUserInfoService.findByWxOpenId(wxOpenId);
+
+        SessionInfo sessionInfo=new SessionInfo();
 
         sessionInfo.setOpenId(wxOpenId);
         sessionInfo.setSessionKey(wxSessionKey);
@@ -113,6 +118,11 @@ public class WxService {
         sysLoginLog.setUserId(userId);
 
         sysLoginLog.setIp(IpUtil.getIp(HttpUtil.getRequest()));
+
+        sysLoginLog.setLoginType(LoginEnum.WEIXIN);
+
+        sysLoginLogSerVice.add(sysLoginLog);
+
     }
 
 

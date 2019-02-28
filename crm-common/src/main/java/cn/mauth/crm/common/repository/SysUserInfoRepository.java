@@ -36,4 +36,6 @@ public interface SysUserInfoRepository extends BaseRepository<SysUserInfo,Long> 
     void deleteByIds(@Param("ids") String ids);
 
     int countByWxOpenId(String openId);
+
+    SysUserInfo findByPhone(String phone);
 }

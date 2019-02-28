@@ -61,7 +61,7 @@ public class SysAuthorityController extends BaseController{
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("修改权限")
+    @ApiOperation("根据id修改权限")
     public Result update(@PathVariable Long id,SysAuthority sysAuthority) {
         if(service.update(sysAuthority)){
             return ok("修改成功");
@@ -70,7 +70,7 @@ public class SysAuthorityController extends BaseController{
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("删除权限")
+    @ApiOperation("根据id删除权限")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){
             return ok("删除成功");

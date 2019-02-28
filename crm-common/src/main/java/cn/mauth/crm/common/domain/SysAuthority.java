@@ -11,7 +11,6 @@ public class SysAuthority extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**权限名称*/
-    @Column(updatable = false,length = 100)
     private String name;
 
     /**权限路径*/

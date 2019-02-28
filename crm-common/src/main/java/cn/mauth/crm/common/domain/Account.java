@@ -14,7 +14,6 @@ public class Account extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**客户名称*/
-    @Column(updatable = false,length = 50)
     private String name;
 
     /**网站*/
@@ -26,7 +25,6 @@ public class Account extends BaseEntity{
     private String type;
 
     /**客户编码*/
-    @Column(updatable = false,length = 100)
     private String code;
 
     /**地址简称*/
@@ -38,7 +36,6 @@ public class Account extends BaseEntity{
     private String address;
 
     /**客户联系电话*/
-    @Column(unique = true,updatable = false,length = 11)
     private String phone;
 
     /**行业*/

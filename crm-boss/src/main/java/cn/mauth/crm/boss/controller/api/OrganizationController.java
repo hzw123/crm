@@ -63,7 +63,7 @@ public class OrganizationController extends BaseController{
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("修改机构")
+    @ApiOperation("根据id修改机构")
     public Result update(@PathVariable Long id,Organization organization) {
         if(service.update(organization)){
             return ok("修改成功");
@@ -72,7 +72,7 @@ public class OrganizationController extends BaseController{
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("删除机构")
+    @ApiOperation("根据id删除机构")
     public Result deleteBy(@PathVariable Long id) {
         return service.removeById(id);
     }

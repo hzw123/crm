@@ -15,19 +15,15 @@ public class Contract extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**合同名称*/
-    @Column(updatable = false,length = 100)
     private String name;
 
     /**合同编码*/
-    @Column(unique = true,updatable = false,length = 100)
     private String code;
 
     /**合同类型*/
-    @Column(updatable = false,length = 100)
     private String type;
 
     /**合同标题*/
-    @Column(updatable = false)
     private String title;
 
     /**所属客户Id*/
@@ -40,11 +36,11 @@ public class Contract extends BaseEntity{
     private double contractAmount;
 
     /**开始日期*/
-    @Column(updatable = false,columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private Date startAt;
 
     /**结束日期*/
-    @Column(updatable = false,columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private Date endAt;
 
     /**详情*/

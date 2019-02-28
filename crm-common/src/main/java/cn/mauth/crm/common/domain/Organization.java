@@ -2,7 +2,6 @@ package cn.mauth.crm.common.domain;
 
 import cn.mauth.crm.util.base.BaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -14,12 +13,13 @@ public class Organization extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**机构名称*/
-    @Column(unique = true,updatable = false,length = 10)
     private String name;
 
     /**机构代码*/
-    @Column(unique = true,updatable = false,length = 10)
     private String code;
+
+    /**logo路径*/
+    private String logoPath;
 
     /**机构状态*/
     private int status;
@@ -38,6 +38,14 @@ public class Organization extends BaseEntity{
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 
     public int getStatus() {

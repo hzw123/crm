@@ -59,7 +59,7 @@ public abstract class BaseService<D extends BaseRepository,T extends BaseEntity>
 
             if(old!=null){
 
-                t.setCrateAt(old.getCrateAt());
+                t.setCreateAt(old.getCreateAt());
 
                 repository.save(t);
 

@@ -18,8 +18,8 @@ spring:
 
 img:
   local:
-    path:
-  host:
+    path: e:/file/crm
+  host: http://localhost:8999/crm/v1/up-down/image
 
 logging:
   file: ./log/${spring.application.name}.log

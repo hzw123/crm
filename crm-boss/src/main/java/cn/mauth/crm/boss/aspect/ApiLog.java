@@ -1,6 +1,7 @@
 package cn.mauth.crm.boss.aspect;
 
 import cn.mauth.crm.util.common.HttpUtil;
+import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -31,19 +32,11 @@ public class ApiLog {
     @Before("log()")
     public void before(JoinPoint joinPoint){
         threadLocal.set(System.currentTimeMillis());
-        log.warn("into aspect of Log ");
-    }
 
-
-    @AfterReturning("log()")
-    public void after(JoinPoint joinPoint){
-        this.log(joinPoint);
-    }
-
-    private void log(JoinPoint joinPoint){
         HttpServletRequest request= HttpUtil.getRequest();
 
         String uri=request.getRequestURI();
+
         String type=request.getMethod();
 
         String method=joinPoint.getSignature().getName();
@@ -54,10 +47,24 @@ public class ApiLog {
 
         String param= Arrays.toString(objects);
 
+        log.info("\n{\n\turi:{},\n\ttype:{},\n\tclassName:{}," +
+                        "\n\tmethod:{},\n\tparam:{},\n}",
+                uri,type,className,method, param);
+    }
+
+
+    @AfterReturning("log()")
+    public void after(JoinPoint joinPoint){
         long time=System.currentTimeMillis()-threadLocal.get();
 
-        log.info("\n{\n\turi:{},\n\ttype:{},\n\tclassName:{}," +
-                        "\n\tmethod:{},\n\tparam:{},\n\ttimeLong:{}\n}",
-                uri,type,className,method, param,time);
+        log.info("用时:{}",time);
+
     }
+
+    @Before("@annotation(api)")
+    public void api(JoinPoint joinPoint,ApiOperation api){
+        log.info("api的作用:{}",api.value());
+    }
+
+
 }

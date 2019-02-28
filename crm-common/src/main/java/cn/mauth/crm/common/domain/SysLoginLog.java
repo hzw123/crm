@@ -1,5 +1,6 @@
 package cn.mauth.crm.common.domain;
 
+import cn.mauth.crm.util.enums.LoginEnum;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,7 +23,7 @@ public class SysLoginLog implements Serializable{
 
     /**登录时间*/
     @CreatedDate
-    @Column(updatable = false,columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private Date loginAt;
 
     /**openId*/
@@ -35,6 +36,9 @@ public class SysLoginLog implements Serializable{
     private String ip;
 
     private String sessionId;
+
+    /**登录方式*/
+    private LoginEnum loginType;
 
     /**备注*/
     private String remark;
@@ -85,6 +89,14 @@ public class SysLoginLog implements Serializable{
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public LoginEnum getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(LoginEnum loginType) {
+        this.loginType = loginType;
     }
 
     public String getRemark() {

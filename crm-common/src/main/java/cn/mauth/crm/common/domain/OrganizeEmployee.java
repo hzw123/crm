@@ -30,11 +30,9 @@ public class OrganizeEmployee implements Serializable{
     private Date updateAt;
 
     /**机构Id*/
-    @Column(nullable = false)
     private Long orgId;
 
     /**机构下员工Id*/
-    @Column(nullable = false)
     private Long userId;
 
     /**是否管理员*/

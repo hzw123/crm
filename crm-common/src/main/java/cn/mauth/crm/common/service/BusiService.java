@@ -1,11 +1,12 @@
 package cn.mauth.crm.common.service;
 
+import cn.mauth.crm.common.bean.BusStats;
 import cn.mauth.crm.common.domain.BusRecord;
 import cn.mauth.crm.common.domain.BusinessOpportunity;
-import cn.mauth.crm.common.domain.Stage;
 import cn.mauth.crm.common.repository.BusRecordRepository;
 import cn.mauth.crm.common.repository.BusinessOpportunityRepository;
 import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.util.common.DateUtil;
 import cn.mauth.crm.util.common.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BusiService extends BaseService<BusinessOpportunityRepository,BusinessOpportunity>{
@@ -41,39 +41,36 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
         return flag;
     }
 
-
-    /**
-     * 阶段变化
-     * @param id
-     * @param amount
-     * @param stage
-     * @return
-     */
-    public boolean change(Long id,double amount, Stage stage){
+    @Override
+    public boolean update(BusinessOpportunity businessOpportunity) {
         boolean flag=false;
-        try{
-            BusinessOpportunity businessOpportunity=this.findById(id);
-            if(businessOpportunity!=null){
+        try {
 
-                this.addRecord(businessOpportunity);
+            BusinessOpportunity old=this.findById(businessOpportunity.getId());
 
-                if(amount>0){
-                    businessOpportunity.setAmount(amount);
-                }
+            if(old!=null){
 
-                if(stage!=null){
-                    businessOpportunity.setStage(stage);
+                businessOpportunity.setCreateAt(old.getCreateAt());
+
+                if(businessOpportunity.getStage()==null){
+                    businessOpportunity.setStage(old.getStage());
+                }else{
+                    if(businessOpportunity.getStage().getId()==old.getStage().getId()){
+                        this.addRecord(businessOpportunity);
+                    }
                 }
 
                 repository.save(businessOpportunity);
 
                 flag=true;
             }
+
         }catch (Exception e){
             log.error(e.getMessage());
         }
         return flag;
     }
+
 
     /**
      *添加商机阶段变动记录
@@ -96,6 +93,24 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
         busRecordRepository.save(busRecord);
     }
 
+    public List<BusRecord> findRecord(Long busId){
+        return busRecordRepository.findAll(this.recordParam(busId));
+    }
+
+    public Page<BusRecord> pageRecord(Long busId,Pageable pageable){
+        return busRecordRepository.findAll(this.recordParam(busId),PageUtil.getPageable(pageable));
+    }
+
+    private Specification<BusRecord> recordParam(Long busId){
+        return (root, query, cb) -> {
+            List<Predicate> list=new ArrayList<>();
+
+            if(busId!=null && busId>0)
+                list.add(cb.equal(root.get("busId"),busId));
+
+            return cb.and(list.toArray(new Predicate[list.size()]));
+        };
+    }
 
     public Page<BusinessOpportunity> page(Long accountId,int status,String state,Pageable pageable) {
         return repository.findAll(this.specification(accountId,status,state), PageUtil.getPageable(pageable));
@@ -119,5 +134,38 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
 
             return cb.and(list.toArray(new Predicate[list.size()]));
         };
+    }
+
+
+    public Map<String, BusStats> statistics(Long userId){
+        Date date=new Date();
+        String day=repository.statistics(DateUtil.SQL_DAY,DateUtil.toDay(date));
+        String week=repository.statistics(DateUtil.SQL_WEEK,DateUtil.toWeek(date));
+        String month=repository.statistics(DateUtil.SQL_MONTH,DateUtil.toMonth(date));
+        String year=repository.statistics(DateUtil.SQL_YEAR,DateUtil.toYear(date));
+
+        Map<String,BusStats> result=new HashMap<>();
+
+        result.put("day",this.getBusStats(day));
+        result.put("week",this.getBusStats(week));
+        result.put("month",this.getBusStats(month));
+        result.put("year",this.getBusStats(year));
+
+        return result;
+    }
+
+    public Map<String, BusStats> statisticsOfGroup(Long orgId){
+        Map<String,BusStats> result=new HashMap<>();
+
+        return result;
+    }
+
+
+    private BusStats getBusStats(String data){
+        String[] str=data.split(",");
+        int a=Integer.valueOf(str[0]);
+        int b=Integer.valueOf(str[1]);
+        int c=Integer.valueOf(str[2]);
+        return new BusStats(a,b,c);
     }
 }

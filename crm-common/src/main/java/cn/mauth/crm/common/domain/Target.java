@@ -14,11 +14,9 @@ public class Target extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**名称*/
-    @Column(updatable = false,length = 100)
     private String name;
 
     /**团队*/
-    @Column(updatable = false,length = 100)
     private String team;
 
     /**团队负责人*/

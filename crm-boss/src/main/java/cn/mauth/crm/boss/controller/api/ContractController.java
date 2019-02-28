@@ -56,7 +56,7 @@ public class ContractController extends BaseController{
 
     @PostMapping
     @ApiOperation("添加一个合同")
-    public Result error(Contract contract) {
+    public Result add(Contract contract) {
         if(service.add(contract)){
             return ok("添加成功");
         }
@@ -64,7 +64,7 @@ public class ContractController extends BaseController{
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("修改合同")
+    @ApiOperation("根据id修改合同")
     public Result update(@PathVariable Long id,Contract contract) {
         if(service.update(contract)){
             return ok("修改成功");
@@ -73,7 +73,7 @@ public class ContractController extends BaseController{
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("删除合同")
+    @ApiOperation("根据id删除合同")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){
             return ok("删除成功");

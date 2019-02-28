@@ -53,7 +53,7 @@ public class AccountController extends BaseController{
 
     @PostMapping
     @ApiOperation("添加一个客户")
-    public Result error(Account account) {
+    public Result add(Account account) {
         if(service.add(account)){
             return ok("添加成功");
         }
@@ -76,5 +76,11 @@ public class AccountController extends BaseController{
             return ok("删除成功");
         }
         return error("删除失败");
+    }
+
+    @GetMapping("/{id}/stats")
+    @ApiOperation("客户统计")
+    public Result accountStats(@PathVariable Long id){
+        return ok(service.accountStats(id));
     }
 }

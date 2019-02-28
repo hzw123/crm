@@ -20,6 +20,7 @@ public class SysUserInfoController extends BaseController{
     @Autowired
     private SysUserInfoService service;
 
+
     @GetMapping("/{id}")
     @ApiOperation("通过id获得用户")
     public Result findById(@PathVariable Long id){
@@ -34,7 +35,7 @@ public class SysUserInfoController extends BaseController{
     }
 
     @GetMapping
-    @ApiOperation("根据角色获得用户列表")
+    @ApiOperation("根据角色名称获得用户列表")
     public Result getAdministratorList(@RequestParam(value = "type") String type){
 
         List<SysUserInfo> list=service.findAdminList(type);
@@ -52,17 +53,25 @@ public class SysUserInfoController extends BaseController{
         return ok(service.page(pageable));
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation("修改用户信息")
-    public Result update(@PathVariable Long id,SysUserInfo sysUserInfo){
-        if(service.update(sysUserInfo)){
-            return ok("删除成功");
-        }
-        return error("删除失败");
+
+    @PostMapping
+    @ApiOperation("创建用户")
+    public Result create(@PathVariable Long id,SysUserInfo sysUserInfo){
+        return service.createUser(sysUserInfo);
     }
 
+    @PutMapping
+    @ApiOperation("根据id修改用户信息")
+    public Result update(@PathVariable Long id,SysUserInfo sysUserInfo){
+        if(service.update(sysUserInfo)){
+            return ok("修改成功");
+        }
+        return error("修改失败");
+    }
+
+
     @DeleteMapping("/{id}")
-    @ApiOperation("删除用户信息")
+    @ApiOperation("根据id删除用户信息")
     public Result delete(@PathVariable Long id){
         if(service.noDisabled(id)){
             return ok("删除成功");

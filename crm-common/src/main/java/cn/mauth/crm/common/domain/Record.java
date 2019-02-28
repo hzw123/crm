@@ -21,15 +21,13 @@ public class Record implements Serializable{
     private Long id;
 
     @CreatedDate
-    @Column(updatable = false,columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private Date createAt;
 
     /**记录类型*/
-    @Column(updatable = false,length = 100)
     private String type;
 
     /**动作*/
-    @Column(updatable = false,length = 100)
     private String action;
 
     /**详情*/

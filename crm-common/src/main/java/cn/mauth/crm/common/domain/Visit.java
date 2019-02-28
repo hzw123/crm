@@ -15,15 +15,13 @@ public class Visit extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**终端名称*/
-    @Column(updatable = false,length = 50)
     private String terminalName;
 
     /**终端地址*/
-    @Column(updatable = false,length = 100)
     private String terminalAddress;
 
     /**计划时间*/
-    @Column(updatable = false,columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private Date planAt;
 
     /**签到时间*/
@@ -35,7 +33,7 @@ public class Visit extends BaseEntity{
     private Date signOut;
 
     /**拜访计划*/
-    @Column(updatable = false,columnDefinition = "text")
+    @Column(columnDefinition = "text")
     private String plan;
 
     /**拜访内容*/

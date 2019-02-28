@@ -53,7 +53,7 @@ public class ContactController extends BaseController{
 
     @PostMapping
     @ApiOperation("添加一个联系人信息")
-    public Result error(Contact contact) {
+    public Result add(Contact contact) {
         if(service.add(contact)){
             return ok("添加成功");
         }
@@ -61,7 +61,7 @@ public class ContactController extends BaseController{
     }
 
     @PutMapping("/{id}")
-    @ApiOperation("修改联系人信息")
+    @ApiOperation("根据id修改联系人信息")
     public Result update(@PathVariable Long id,Contact contact) {
         if(service.add(contact)){
             return ok("修改成功");
@@ -70,7 +70,7 @@ public class ContactController extends BaseController{
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("删除联系人信息")
+    @ApiOperation("根据id删除联系人信息")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){
             return ok("删除成功");

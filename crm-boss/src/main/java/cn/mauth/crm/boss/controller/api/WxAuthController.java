@@ -2,7 +2,6 @@ package cn.mauth.crm.boss.controller.api;
 
 import cn.mauth.crm.common.bean.SessionInfo;
 import cn.mauth.crm.common.service.RedisService;
-import cn.mauth.crm.common.service.WxService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.AES;
 import cn.mauth.crm.util.common.Result;
@@ -13,52 +12,20 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.Arrays;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/crm/v1/wx")
 @ApiModel("微信用户认证相关API")
 public class WxAuthController extends BaseController{
 
-    @Autowired
-    private WxService wxService;
 
     @Autowired
     private RedisService redisService;
-
-    @GetMapping(value = "/getSession", produces = "application/json")
-    @ApiOperation("获取sessionId")
-    public Result createSessionId(@RequestParam(value = "code") String wxCode){
-
-        Map<String,Object> wxSessionMap = wxService.getWxSession(wxCode);
-
-        if(null == wxSessionMap){
-            return Result.of(50010, null);
-        }
-
-        //获取异常
-        if(wxSessionMap.containsKey("errcode")){
-            return Result.of(50020, wxSessionMap.get("errmsg").toString());
-        }
-
-        String wxOpenId = (String) wxSessionMap.get("openid");
-
-        String wxSessionKey = (String) wxSessionMap.get("session_key");
-
-        Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
-
-        String sessionId = wxService.create3rdSession(wxOpenId, wxSessionKey, expires);
-
-        return ok(sessionId);
-    }
-
-
 
     /**
      * 验证用户信息完整性

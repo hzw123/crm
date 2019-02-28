@@ -2,7 +2,6 @@ package cn.mauth.crm.common.domain;
 
 import cn.mauth.crm.util.base.BaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -14,15 +13,12 @@ public class Weekly extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     /**用户名*/
-    @Column(updatable = false,length = 50)
     private String userName;
 
     /**上周总结*/
-    @Column(updatable = false,length = 50)
     private String lastSummary;
 
     /**下周计划*/
-    @Column(updatable = false,length = 50)
     private String nextPlan;
 
     public String getUserName() {

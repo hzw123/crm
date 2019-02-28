@@ -14,4 +14,13 @@ public interface BusinessOpportunityRepository extends BaseRepository<BusinessOp
     @Modifying
     void updateStatus(@Param("id") Long id,@Param("status") int status);
 
+    int countByAccountId(Long accountId);
+
+    @Query(value = "select " +
+            "count(1) as a," +
+            "sum(if(bus.status=1,1,0)) as b," +
+            "sum(if(bus.status=-1,1,0)) as c " +
+            "from business_opportunity bus " +
+            "where date_format(bus.create_at,:format)=:dayStr",nativeQuery = true)
+    String statistics(@Param("format") String format, @Param("dayStr") String dayStr);
 }

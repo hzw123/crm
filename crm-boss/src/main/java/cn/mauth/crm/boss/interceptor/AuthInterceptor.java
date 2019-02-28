@@ -23,17 +23,17 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String sessionId=request.getParameter(Constants.SESSIN_ID);
 
-        if(StringUtils.isEmpty(sessionId)){
-            HttpUtil.sendCall(response, 401,"sessionId不能为空");
-            return false;
-        }
-
-        SessionInfo sessionInfo=redisService.getSessionInfo(sessionId);
-
-        if(null==sessionInfo){
-            HttpUtil.sendCall(response, 401,"没有权限");
-            return false;
-        }
+//        if(StringUtils.isEmpty(sessionId)){
+//            HttpUtil.sendCall(response, 401,"sessionId不能为空");
+//            return false;
+//        }
+//
+//        SessionInfo sessionInfo=redisService.getSessionInfo(sessionId);
+//
+//        if(null==sessionInfo){
+//            HttpUtil.sendCall(response, 401,"没有权限");
+//            return false;
+//        }
 
         return true;
     }

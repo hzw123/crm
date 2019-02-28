@@ -1,5 +1,6 @@
 package cn.mauth.crm.boss.controller.api;
 
+import cn.mauth.crm.common.domain.Target;
 import cn.mauth.crm.common.domain.Visit;
 import cn.mauth.crm.common.service.VisitService;
 import cn.mauth.crm.util.base.BaseController;
@@ -8,10 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +50,32 @@ public class VisitController extends BaseController{
     public Result page(Pageable pageable){
 
         return ok(service.page(pageable));
+    }
+
+    @PostMapping
+    @ApiOperation("添加一个拜访")
+    public Result add(Visit visit) {
+        if(service.add(visit)){
+            return ok("添加成功");
+        }
+        return error("添加失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("根据id修改拜访")
+    public Result update(@PathVariable Long id,Visit visit) {
+        if(service.update(visit)){
+            return ok("修改成功");
+        }
+        return error("修改失败");
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("根据id删除拜访")
+    public Result deleteBy(@PathVariable Long id) {
+        if(service.deleteById(id)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
     }
 }

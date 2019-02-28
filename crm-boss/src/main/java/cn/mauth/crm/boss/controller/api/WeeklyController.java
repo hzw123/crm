@@ -1,5 +1,6 @@
 package cn.mauth.crm.boss.controller.api;
 
+import cn.mauth.crm.common.domain.Visit;
 import cn.mauth.crm.common.domain.Weekly;
 import cn.mauth.crm.common.service.WeeklySerVice;
 import cn.mauth.crm.util.base.BaseController;
@@ -8,10 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +50,33 @@ public class WeeklyController extends BaseController{
     public Result page(Pageable pageable){
 
         return ok(service.page(pageable));
+    }
+
+
+    @PostMapping
+    @ApiOperation("添加一个周报")
+    public Result add(Weekly weekly) {
+        if(service.add(weekly)){
+            return ok("添加成功");
+        }
+        return error("添加失败");
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation("根据id修改周报")
+    public Result update(@PathVariable Long id,Weekly weekly) {
+        if(service.update(weekly)){
+            return ok("修改成功");
+        }
+        return error("修改失败");
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("根据id删除周报")
+    public Result deleteBy(@PathVariable Long id) {
+        if(service.deleteById(id)){
+            return ok("删除成功");
+        }
+        return error("删除失败");
     }
 }

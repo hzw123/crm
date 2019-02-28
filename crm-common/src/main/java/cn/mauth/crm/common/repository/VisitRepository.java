@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VisitRepository extends BaseRepository<Visit,Long> {
 
+    int countByAccountId(Long accountId);
 }
