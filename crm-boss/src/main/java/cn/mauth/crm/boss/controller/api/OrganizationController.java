@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/crm/v1/org")
 @ApiModel("机构API")
@@ -22,47 +20,34 @@ public class OrganizationController extends BaseController{
     @Autowired
     private OrganizationService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询机构")
     public Result findById(@PathVariable Long id){
-
-        Organization org=service.findById(id);
-
-        if(org==null)
-            return error("没有找到id:"+id+"的机构");
-
-        return ok(org);
+        return ok(service.findById(id));
     }
 
     @GetMapping
-    @ApiOperation("查询所有机构")
-    public Result findAll(){
-
-        List<Organization> list=service.findAll();
-
-        if(list==null || list.size()==0)
-            return error("还没有机构");
-
-        return ok(list);
+    @ApiOperation("根据条件查询所有机构")
+    public Result findAll(Organization organization){
+        return ok(service.findAll(organization));
     }
 
     @GetMapping("/page")
-    @ApiOperation("分页查询机构")
-    public Result page(Pageable pageable){
-
-        return ok(service.page(pageable));
+    @ApiOperation("根据条件分页查询机构")
+    public Result page(Organization organization,Pageable pageable){
+        return ok(service.page(organization,pageable));
     }
 
     @PostMapping
     @ApiOperation("添加一个机构")
-    public Result error(Organization organization) {
+    public Result add(Organization organization) {
         if(service.add(organization)){
             return ok("添加成功");
         }
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改机构")
     public Result update(@PathVariable Long id,Organization organization) {
         if(service.update(organization)){
@@ -71,7 +56,7 @@ public class OrganizationController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除机构")
     public Result deleteBy(@PathVariable Long id) {
         return service.removeById(id);
@@ -117,7 +102,7 @@ public class OrganizationController extends BaseController{
         return ok("创建主管成功");
     }
 
-    @DeleteMapping("/{id}/users")
+    @PostMapping("/{id}/users/delete")
     @ApiOperation("从机构里移除用户")
     public Result removeUsers(@PathVariable Long id, UserBean userBean){
         if(userBean.getId()<=0){
@@ -132,7 +117,7 @@ public class OrganizationController extends BaseController{
         return ok("移除成功");
     }
 
-    @PutMapping("/{id}/users")
+    @PostMapping("/{id}/users/put")
     @ApiOperation("修改机构里用户的信息")
     public Result updateUser(@PathVariable Long id, OrganizeEmployee organizeEmployee){
 

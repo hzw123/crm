@@ -45,7 +45,7 @@ public class SysUserInfo extends BaseEntity {
     /**邮箱*/
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sys_user_role",
     joinColumns = {@JoinColumn(name = "user_id")},
     inverseJoinColumns = {@JoinColumn(name = "role_id")})

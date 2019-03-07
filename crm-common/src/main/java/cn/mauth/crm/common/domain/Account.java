@@ -4,6 +4,7 @@ import cn.mauth.crm.util.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.Date;
 
 /**
  * 客户
@@ -21,18 +22,18 @@ public class Account extends BaseEntity{
     private String website;
 
     /**客户类型*/
-    @Column(updatable = false)
     private String type;
+
+    /**场馆类型*/
+    private String venueType;
 
     /**客户编码*/
     private String code;
 
     /**地址简称*/
-    @Column(updatable = false,length = 100)
     private String addressOr;
 
     /**地址*/
-    @Column(updatable = false,length = 200)
     private String address;
 
     /**客户联系电话*/
@@ -55,6 +56,19 @@ public class Account extends BaseEntity{
 
     /**是否属于公海*/
     private boolean isCommon;
+
+    /**供应商*/
+    private String provider;
+
+    /**购买时间*/
+    @Column(columnDefinition = "datetime")
+    private Date buyAt;
+
+    /**微信公众号名称*/
+    private String wxMp;
+
+    /**信息来源*/
+    private String source;
 
     public String getName() {
         return name;
@@ -158,5 +172,45 @@ public class Account extends BaseEntity{
 
     public void setCommon(boolean common) {
         isCommon = common;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public Date getBuyAt() {
+        return buyAt;
+    }
+
+    public void setBuyAt(Date buyAt) {
+        this.buyAt = buyAt;
+    }
+
+    public String getWxMp() {
+        return wxMp;
+    }
+
+    public void setWxMp(String wxMp) {
+        this.wxMp = wxMp;
+    }
+
+    public String getVenueType() {
+        return venueType;
+    }
+
+    public void setVenueType(String venueType) {
+        this.venueType = venueType;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

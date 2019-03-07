@@ -5,6 +5,7 @@ import cn.mauth.crm.common.domain.Stage;
 import cn.mauth.crm.common.service.BusiService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
+import cn.mauth.crm.util.enums.TimeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class BusinessOpportunityController extends BaseController{
     @Autowired
     private BusiService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询商机")
     public Result findById(@PathVariable Long id){
 
@@ -36,19 +37,12 @@ public class BusinessOpportunityController extends BaseController{
     @GetMapping
     @ApiOperation("查询所有商机")
     public Result findAll(Long accountId,int status,String state){
-
-        List<BusinessOpportunity> list=service.findAll(accountId,status,state);
-
-        if(list==null || list.size()==0)
-            return error("还没有的商机");
-
-        return ok(list);
+        return ok(service.findAll(accountId,status,state));
     }
 
     @GetMapping("/page")
     @ApiOperation("分页查询商机")
     public Result page(Long accountId,int status,String state,Pageable pageable){
-
         return ok(service.page(accountId,status,state,pageable));
     }
 
@@ -61,7 +55,7 @@ public class BusinessOpportunityController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}/status")
+    @PostMapping("/{id}/status")
     @ApiOperation("根据id修改商机状态")
     public Result updateStatus(@PathVariable Long id,Integer status) {
 
@@ -72,7 +66,7 @@ public class BusinessOpportunityController extends BaseController{
         return error("修改失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改商机")
     public Result update(@PathVariable Long id,BusinessOpportunity businessOpportunity) {
 
@@ -84,7 +78,7 @@ public class BusinessOpportunityController extends BaseController{
     }
 
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除商机")
     public Result deleteById(@PathVariable Long id) {
 
@@ -111,9 +105,17 @@ public class BusinessOpportunityController extends BaseController{
         return ok("删除id:"+id+"成功");
     }
 
-    @GetMapping("/statistics/{userId}")
-    @ApiOperation("统计用户个人的数据")
-    public Result statistics(@PathVariable Long userId) {
-        return ok(service.statistics(userId));
+    @GetMapping("/statistics/{orgId}")
+    @ApiOperation("统计商机的数据")
+    public Result statistics(@PathVariable Long orgId,boolean isUser) {
+        return ok(service.statistics(orgId,isUser));
     }
+
+    @GetMapping("/statistics/{orgId}/time")
+    @ApiOperation("根据条件统计商机的数据")
+    public Result statisticsFromTime(@PathVariable Long orgId, boolean isUser, TimeEnum format, String time) {
+
+        return ok(service.getBusStats(format.getName(),time,orgId,isUser));
+    }
+
 }

@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/crm/v1/auths")
 @ApiModel("权限API")
@@ -20,35 +18,22 @@ public class SysAuthorityController extends BaseController{
     @Autowired
     private SysAuthService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询权限")
     public Result findById(@PathVariable Long id){
-
-        SysAuthority auth=service.findById(id);
-
-        if(auth==null)
-            return error("没有找到id:"+id+"的权限");
-
-        return ok(auth);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有权限")
-    public Result findAll(){
-
-        List<SysAuthority> list=service.findAll();
-
-        if(list==null || list.size()==0)
-            return error("还没有权限");
-
-        return ok(list);
+    public Result findAll(SysAuthority sysAuthority){
+        return ok(service.findAll(sysAuthority));
     }
 
     @GetMapping("/page")
     @ApiOperation("分页查询权限")
-    public Result page(Pageable pageable){
-
-        return ok(service.page(pageable));
+    public Result page(SysAuthority sysAuthority,Pageable pageable){
+        return ok(service.page(sysAuthority,pageable));
     }
 
     @PostMapping
@@ -60,7 +45,7 @@ public class SysAuthorityController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改权限")
     public Result update(@PathVariable Long id,SysAuthority sysAuthority) {
         if(service.update(sysAuthority)){
@@ -69,7 +54,7 @@ public class SysAuthorityController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除权限")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

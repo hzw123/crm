@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/crm/v1/contacts")
 @ApiModel("联系人信息API")
@@ -20,28 +18,16 @@ public class ContactController extends BaseController{
     @Autowired
     private ContactService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询联系人信息")
     public Result findById(@PathVariable Long id){
-
-        Contact contact=service.findById(id);
-
-        if(contact==null)
-            return error("没有找到id:"+id+"的联系人信息");
-
-        return ok(contact);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有联系人信息")
     public Result findAll(Contact contact){
-
-        List<Contact> list=service.findAll(contact);
-
-        if(list==null || list.size()==0)
-            return error("还没有联系人信息");
-
-        return ok(list);
+        return ok(service.findAll(contact));
     }
 
     @GetMapping("/page")
@@ -60,7 +46,7 @@ public class ContactController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改联系人信息")
     public Result update(@PathVariable Long id,Contact contact) {
         if(service.add(contact)){
@@ -69,7 +55,7 @@ public class ContactController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除联系人信息")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

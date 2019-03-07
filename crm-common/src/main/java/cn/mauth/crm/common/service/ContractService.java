@@ -2,7 +2,8 @@ package cn.mauth.crm.common.service;
 
 import cn.mauth.crm.common.domain.Contract;
 import cn.mauth.crm.common.repository.ContractRepository;
-import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
+import cn.mauth.crm.util.common.DateUtil;
 import cn.mauth.crm.util.common.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,8 @@ import java.util.List;
 @Service
 public class ContractService extends BaseService<ContractRepository,Contract>{
 
-    public ContractService(ContractRepository repository) {
-        super(repository);
+    public ContractService(ContractRepository repository, SysUserInfoRepository sysUserInfoRepository) {
+        super(repository, sysUserInfoRepository);
     }
 
     public List<Contract> findAll(
@@ -63,4 +64,20 @@ public class ContractService extends BaseService<ContractRepository,Contract>{
             return cb.and(list.toArray(new Predicate[list.size()]));
         };
     }
+
+    @Override
+    public boolean add(Contract contract) {
+        contract.setCode(this.getCode());
+        return super.add(contract);
+    }
+
+    public synchronized String getCode(){
+
+        int count=repository.countByToDay()+1;
+
+        String code=DateUtil.getDate()+count;
+
+        return code;
+    }
+
 }

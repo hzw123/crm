@@ -2,7 +2,7 @@ package cn.mauth.crm.common.service;
 
 import cn.mauth.crm.common.domain.Contact;
 import cn.mauth.crm.common.repository.ContactRepository;
-import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
 import cn.mauth.crm.util.common.PageUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
@@ -17,8 +17,8 @@ import java.util.List;
 @Service
 public class ContactService extends BaseService<ContactRepository,Contact>{
 
-    public ContactService(ContactRepository repository) {
-        super(repository);
+    public ContactService(ContactRepository repository, SysUserInfoRepository sysUserInfoRepository) {
+        super(repository, sysUserInfoRepository);
     }
 
     public List<Contact> findAll(Contact contact) {

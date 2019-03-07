@@ -15,6 +15,10 @@ public interface SysUserInfoRepository extends BaseRepository<SysUserInfo,Long> 
 
     SysUserInfo findByWxOpenId(String openId);
 
+    @Query(value = "select real_name from where id=:id",nativeQuery = true)
+    String findNameById(@Param("id") Long id);
+
+
     @Query(value = "select *from sys_user_info " +
             "where disabled=0 " +
             "and id in (" +

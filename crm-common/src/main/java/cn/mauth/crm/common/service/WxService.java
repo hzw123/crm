@@ -1,12 +1,8 @@
 package cn.mauth.crm.common.service;
 
-import cn.mauth.crm.common.domain.SysLoginLog;
-import cn.mauth.crm.common.domain.SysRole;
 import cn.mauth.crm.common.domain.SysUserInfo;
 import cn.mauth.crm.common.properties.WxAuth;
-import cn.mauth.crm.common.bean.SessionInfo;
 import cn.mauth.crm.util.common.*;
-import cn.mauth.crm.util.enums.LoginEnum;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +17,7 @@ public class WxService {
     private WxAuth wxAuth;
 
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private SysUserInfoService sysUserInfoService;
-
-    @Autowired
-    private SysLoginLogSerVice sysLoginLogSerVice;
 
 
     /**
@@ -46,6 +36,7 @@ public class WxService {
 
         sb.append("&js_code=").append(wxCode);
 
+
         String res = HttpRequest.sendGet(wxAuth.getSessionHost(), sb.toString());
 
         if(res == null || res.equals("")){
@@ -55,75 +46,51 @@ public class WxService {
         return JSON.parseObject(res, Map.class);
     }
 
-    /**
-     * 缓存微信openId和session_key
-     * @param wxOpenId		微信用户唯一标识
-     * @param wxSessionKey	微信服务器会话密钥
-     * @param expires		会话有效期, 以秒为单位, 例如2592000代表会话有效期为30天
-     * @return
-     */
-    public String create3rdSession(String wxOpenId, String wxSessionKey, Long expires){
-        SysUserInfo userInfo=null;
+    public String getOpenId(String code) {
 
-        if(!sysUserInfoService.existByWxOpenId(wxOpenId)){
-            userInfo=new SysUserInfo();
+        Map<String,Object> wxSessionMap = this.getWxSession(code);
+
+        if(null == wxSessionMap){
+            return null;
+        }
+
+        //获取异常
+        if(wxSessionMap.containsKey("errcode")){
+            return null;
+        }
+
+        String wxOpenId = (String) wxSessionMap.get("openid");
+
+        String wxSessionKey = (String) wxSessionMap.get("session_key");
+
+        String wxUnionId=(String) wxSessionMap.get("unionid");
+
+
+        this.addUser(wxOpenId,wxSessionKey,wxUnionId);
+
+        return wxOpenId;
+    }
+
+    private void addUser(String openId,String sessionKey,String unionId){
+
+        if(!sysUserInfoService.existByWxOpenId(openId)){
+
+            SysUserInfo userInfo=new SysUserInfo();
 
             userInfo.setAppId(wxAuth.getAppId());
-            userInfo.setWxOpenId(wxOpenId);
+
+            userInfo.setWxOpenId(openId);
+
+            userInfo.setWxUnionId(unionId);
+
             userInfo.setSalt(RandomStringUtils.randomAlphanumeric(32));
+
             userInfo.setPassword(HexUtil.md5Hex(userInfo.getSalt()+"123456"));
-            userInfo.setSessionKey(wxSessionKey);
 
-            sysUserInfoService.add(userInfo);
+            userInfo.setSessionKey(sessionKey);
+
+            sysUserInfoService.save(userInfo);
         }
-
-        String thirdSessionKey = RandomStringUtils.randomAlphanumeric(64);
-
-
-        userInfo=sysUserInfoService.findByWxOpenId(wxOpenId);
-
-        SessionInfo sessionInfo=new SessionInfo();
-
-        sessionInfo.setOpenId(wxOpenId);
-        sessionInfo.setSessionKey(wxSessionKey);
-        sessionInfo.setUserId(userInfo.getId());
-        sessionInfo.setUser(userInfo);
-
-        for (SysRole role:userInfo.getSysRoles()) {
-            if(role.getName().equals(Constants.ADMIN)){
-                sessionInfo.setAdmin(true);
-                break;
-            }
-        }
-
-        redisService.add(thirdSessionKey, expires, JSON.toJSONString(sessionInfo));
-
-        this.addLoginLog(thirdSessionKey,wxOpenId,userInfo.getId());
-
-        return thirdSessionKey;
     }
-
-    /**
-     *  添加登录日志
-     * @param sessionId
-     */
-    private void addLoginLog(String sessionId,String openId,Long userId){
-
-        SysLoginLog sysLoginLog=new SysLoginLog();
-
-        sysLoginLog.setSessionId(sessionId);
-
-        sysLoginLog.setOpenId(openId);
-
-        sysLoginLog.setUserId(userId);
-
-        sysLoginLog.setIp(IpUtil.getIp(HttpUtil.getRequest()));
-
-        sysLoginLog.setLoginType(LoginEnum.WEIXIN);
-
-        sysLoginLogSerVice.add(sysLoginLog);
-
-    }
-
 
 }

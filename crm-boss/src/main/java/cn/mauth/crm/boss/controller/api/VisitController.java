@@ -1,6 +1,5 @@
 package cn.mauth.crm.boss.controller.api;
 
-import cn.mauth.crm.common.domain.Target;
 import cn.mauth.crm.common.domain.Visit;
 import cn.mauth.crm.common.service.VisitService;
 import cn.mauth.crm.util.base.BaseController;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/crm/v1/visits")
 @ApiModel("拜访API")
@@ -21,34 +18,21 @@ public class VisitController extends BaseController{
     @Autowired
     private VisitService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询拜访")
     public Result findById(@PathVariable Long id){
-
-        Visit visit=service.findById(id);
-
-        if(visit==null)
-            return error("没有找到id:"+id+"的拜访");
-
-        return ok(visit);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有拜访")
-    public Result findAll(){
-
-        List<Visit> list=service.findAll();
-
-        if(list==null || list.size()==0)
-            return error("还没有拜访");
-
-        return ok(list);
+    public Result findAll(Visit visit){
+        return ok(service.findAll());
     }
 
     @GetMapping("/page")
     @ApiOperation("分页查询拜访")
-    public Result page(Pageable pageable){
-
+    public Result page(Visit visit,Pageable pageable){
         return ok(service.page(pageable));
     }
 
@@ -61,7 +45,7 @@ public class VisitController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改拜访")
     public Result update(@PathVariable Long id,Visit visit) {
         if(service.update(visit)){
@@ -70,7 +54,7 @@ public class VisitController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除拜访")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

@@ -4,54 +4,87 @@ import cn.mauth.crm.util.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
  * 合同
  */
 @Entity
-public class Contract extends BaseEntity{
+public class Contract extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    /**合同名称*/
+    /**
+     * 合同名称
+     */
     private String name;
 
-    /**合同编码*/
+    /**
+     * 合同编号
+     */
     private String code;
 
-    /**合同类型*/
+    /**
+     * 合同类型
+     */
     private String type;
 
-    /**合同标题*/
+    /**
+     * 合同标题
+     */
     private String title;
 
-    /**所属客户Id*/
+    /**
+     * 合同签约时间
+     */
+    @Column(columnDefinition = "datetime")
+    private Date signAt;
+
+    /**
+     * 所属客户Id
+     */
     private Long accountId;
 
-    /**所属商机ID*/
+    /**
+     * 所属商机ID
+     */
     private Long busId;
 
-    /**合同金额*/
+    /**
+     * 合同金额
+     */
     private double contractAmount;
 
-    /**开始日期*/
+    /**
+     * 开生效时间
+     */
     @Column(columnDefinition = "datetime")
     private Date startAt;
 
-    /**结束日期*/
+    /**
+     * 结束日期
+     */
     @Column(columnDefinition = "datetime")
     private Date endAt;
 
-    /**详情*/
+    /**
+     * 合同明细
+     */
     @Column(columnDefinition = "text")
     private String details;
 
-    /**状态*/
+    /**
+     * 状态
+     */
     private int status;
 
-    /**状态数量*/
-    private int statusTotal;
+    /**
+     * 合同阶段
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Stage stage;
 
     public String getName() {
         return name;
@@ -83,6 +116,14 @@ public class Contract extends BaseEntity{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getSignAt() {
+        return signAt;
+    }
+
+    public void setSignAt(Date signAt) {
+        this.signAt = signAt;
     }
 
     public Long getAccountId() {
@@ -141,11 +182,11 @@ public class Contract extends BaseEntity{
         this.status = status;
     }
 
-    public int getStatusTotal() {
-        return statusTotal;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setStatusTotal(int statusTotal) {
-        this.statusTotal = statusTotal;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

@@ -1,5 +1,9 @@
-package cn.mauth.crm.util.base;
+package cn.mauth.crm.common.service;
 
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
+import cn.mauth.crm.util.base.BaseEntity;
+import cn.mauth.crm.util.base.BaseRepository;
+import cn.mauth.crm.util.common.NumUtil;
 import cn.mauth.crm.util.common.PageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +15,15 @@ import java.util.List;
 
 public abstract class BaseService<D extends BaseRepository,T extends BaseEntity>{
 
-    protected final D repository;
-
     protected final static Logger log= LoggerFactory.getLogger(BaseService.class);
 
+    protected final D repository;
 
-    public BaseService(D repository) {
+    protected SysUserInfoRepository sysUserInfoRepository;
+
+    public BaseService(D repository, SysUserInfoRepository sysUserInfoRepository) {
         this.repository = repository;
+        this.sysUserInfoRepository = sysUserInfoRepository;
     }
 
     protected Pageable getPageAble(Pageable pageable){
@@ -43,7 +49,17 @@ public abstract class BaseService<D extends BaseRepository,T extends BaseEntity>
     public boolean add(T t){
         boolean flag=false;
         try {
+            if(NumUtil.toLong(t.getCreatorId()))
+                t.setCreatorName(sysUserInfoRepository.findNameById(Long.valueOf(t.getCreatorId())));
+
+            if(NumUtil.toLong(t.getModifiedId()))
+                t.setModifiedName(sysUserInfoRepository.findNameById(Long.valueOf(t.getModifiedId())));
+
+            if(NumUtil.toLong(t.getOwnerId()))
+                t.setOwnerName(sysUserInfoRepository.findNameById(Long.valueOf(t.getOwnerId())));
+
             repository.save(t);
+
             flag=true;
         }catch (Exception e){
             log.error(e.getMessage());
@@ -85,5 +101,6 @@ public abstract class BaseService<D extends BaseRepository,T extends BaseEntity>
 
         return flag;
     }
+
 
 }

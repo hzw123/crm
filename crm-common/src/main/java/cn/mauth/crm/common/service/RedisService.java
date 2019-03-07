@@ -151,7 +151,7 @@ public class RedisService {
     }
 
     public SessionInfo getSessionInfo(){
-        return this.getSessionInfo(HttpUtil.getRequest().getParameter(Constants.SESSIN_ID));
+        return this.getSessionInfo(HttpUtil.getRequest().getParameter(Constants.SESSION_ID));
     }
 
     public Long getUserId(){

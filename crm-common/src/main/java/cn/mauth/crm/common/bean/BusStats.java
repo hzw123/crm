@@ -1,6 +1,7 @@
 package cn.mauth.crm.common.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class BusStats implements Serializable {
 
@@ -9,8 +10,14 @@ public class BusStats implements Serializable {
     /**商机总数*/
     private int busTotal;
 
+    /**商机总金额*/
+    private double busTotalAmount;
+
     /**成交量*/
     private int turnover;
+
+    /**成交总金额*/
+    private double turnoverAmount;
 
     /**流失数*/
     private int lossNumber;
@@ -21,12 +28,16 @@ public class BusStats implements Serializable {
     /**流失率*/
     private String lossRate;
 
+    private List<StageStats> list;
+
     public BusStats() {
     }
 
-    public BusStats(int busTotal, int turnover, int lossNumber) {
+    public BusStats(int busTotal, double busTotalAmount, int turnover, double turnoverAmount, int lossNumber) {
         this.busTotal = busTotal;
+        this.busTotalAmount = busTotalAmount;
         this.turnover = turnover;
+        this.turnoverAmount = turnoverAmount;
         this.lossNumber = lossNumber;
         this.init();
     }
@@ -41,6 +52,22 @@ public class BusStats implements Serializable {
             this.winRate="0.00%";
             this.lossRate="0.00";
         }
+    }
+
+    public double getBusTotalAmount() {
+        return busTotalAmount;
+    }
+
+    public void setBusTotalAmount(double busTotalAmount) {
+        this.busTotalAmount = busTotalAmount;
+    }
+
+    public double getTurnoverAmount() {
+        return turnoverAmount;
+    }
+
+    public void setTurnoverAmount(double turnoverAmount) {
+        this.turnoverAmount = turnoverAmount;
     }
 
     public int getBusTotal() {
@@ -81,5 +108,13 @@ public class BusStats implements Serializable {
 
     public void setLossRate(String lossRate) {
         this.lossRate = lossRate;
+    }
+
+    public List<StageStats> getList() {
+        return list;
+    }
+
+    public void setList(List<StageStats> list) {
+        this.list = list;
     }
 }

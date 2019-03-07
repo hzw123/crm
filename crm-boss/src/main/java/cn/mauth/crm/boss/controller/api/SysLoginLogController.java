@@ -23,7 +23,6 @@ public class SysLoginLogController extends BaseController{
     @GetMapping("/{id}")
     @ApiOperation("根据id查询登录日志")
     public Result findById(@PathVariable Long id) {
-
         return ok(serVice.findById(id));
     }
 

@@ -21,34 +21,21 @@ public class WeeklyController extends BaseController{
     @Autowired
     private WeeklySerVice service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询周报")
     public Result findById(@PathVariable Long id){
-
-        Weekly weekly=service.findById(id);
-
-        if(weekly==null)
-            return error("没有找到id:"+id+"的周报");
-
-        return ok(weekly);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有周报")
-    public Result findAll(){
-
-        List<Weekly> list=service.findAll();
-
-        if(list==null || list.size()==0)
-            return error("还没有周报");
-
-        return ok(list);
+    public Result findAll(Weekly weekly){
+        return ok(service.findAll());
     }
 
     @GetMapping("/page")
     @ApiOperation("分页查询周报")
-    public Result page(Pageable pageable){
-
+    public Result page(Weekly weekly,Pageable pageable){
         return ok(service.page(pageable));
     }
 
@@ -62,7 +49,7 @@ public class WeeklyController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改周报")
     public Result update(@PathVariable Long id,Weekly weekly) {
         if(service.update(weekly)){
@@ -71,7 +58,7 @@ public class WeeklyController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除周报")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

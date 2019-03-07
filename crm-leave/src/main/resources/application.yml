@@ -1,0 +1,19 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: crm-leave
+  profiles:
+    active: local
+
+
+  freemarker:
+      template-loader-path: classpath:/templates/
+      suffix: .ftl
+      charset: utf-8
+      request-context-attribute: request
+
+
+logging:
+  file: ./log/${spring.application.name}.log

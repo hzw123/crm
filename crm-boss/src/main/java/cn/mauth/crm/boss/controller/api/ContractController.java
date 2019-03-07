@@ -20,29 +20,17 @@ public class ContractController extends BaseController{
     @Autowired
     private ContractService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询合同")
     public Result findById(@PathVariable Long id){
-
-        Contract contract=service.findById(id);
-
-        if(contract==null)
-            return error("没有找到id:"+id+"的合同");
-
-        return ok(contract);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有合同")
     public Result findAll(String name,String code,String type, String title,
                           Long accountId,Long busId){
-
-        List<Contract> list=service.findAll(name, code, type, title, accountId, busId);
-
-        if(list==null || list.size()==0)
-            return error("还没有合同");
-
-        return ok(list);
+        return ok(service.findAll(name, code, type, title, accountId, busId));
     }
 
     @GetMapping("/page")
@@ -63,7 +51,7 @@ public class ContractController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改合同")
     public Result update(@PathVariable Long id,Contract contract) {
         if(service.update(contract)){
@@ -72,7 +60,7 @@ public class ContractController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除合同")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

@@ -6,13 +6,19 @@ import cn.mauth.crm.common.domain.OrganizeEmployee;
 import cn.mauth.crm.common.repository.OrganizationRepository;
 import cn.mauth.crm.common.repository.OrganizeEmployeeRepository;
 import cn.mauth.crm.common.repository.SysRoleRepository;
-import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
 import cn.mauth.crm.util.common.Constants;
+import cn.mauth.crm.util.common.PageUtil;
 import cn.mauth.crm.util.common.Result;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,11 +32,48 @@ public class OrganizationService extends BaseService<OrganizationRepository,Orga
     @Autowired
     private SysRoleRepository sysRoleRepository;
 
-
-    public OrganizationService(OrganizationRepository repository) {
-        super(repository);
+    public OrganizationService(OrganizationRepository repository, SysUserInfoRepository sysUserInfoRepository) {
+        super(repository, sysUserInfoRepository);
     }
 
+    public List<Organization> findAll(Organization org) {
+        return repository.findAll(this.specification(org));
+    }
+
+    public Page<Organization> page(Organization org,Pageable pageable) {
+        return repository.findAll(this.specification(org), PageUtil.getPageable(pageable));
+    }
+
+    private Specification<Organization> specification(Organization org){
+        return (root, query, cb) -> {
+            List<Predicate> list=new ArrayList<>();
+
+            if(StringUtils.isNotEmpty(org.getName()))
+                list.add(cb.equal(root.get("name"),org.getName()));
+
+            if(StringUtils.isNotEmpty(org.getCode()))
+                list.add(cb.equal(root.get("code"),org.getCode()));
+
+            if(StringUtils.isNotEmpty(org.getCreatorId()))
+                list.add(cb.equal(root.get("creatorId"),org.getCreatorId()));
+
+            if(StringUtils.isNotEmpty(org.getModifiedId()))
+                list.add(cb.equal(root.get("modifiedId"),org.getModifiedId()));
+
+            if(StringUtils.isNotEmpty(org.getOwnerId()))
+                list.add(cb.equal(root.get("ownerId"),org.getOwnerId()));
+
+            if(org.getStatus()!=-1)
+                list.add(cb.equal(root.get("Status"),org.getStatus()));
+
+            return cb.and(list.toArray(new Predicate[list.size()]));
+        };
+    }
+
+
+    public Organization findByCode(String code) {
+        return repository.findByCode(code);
+    }
 
     /**
      * 添加组织下机构多个用户
@@ -93,7 +136,7 @@ public class OrganizationService extends BaseService<OrganizationRepository,Orga
             organizeEmployee.setCrateAt(old.getCrateAt());
         }
 
-        Long roleId=sysRoleRepository.findIdByName(Constants.MANAGErR);
+        Long roleId=sysRoleRepository.findIdByName(Constants.MANAGEER);
 
         if(sysRoleRepository.countByUserAndRole(userId,roleId)==0){
             sysRoleRepository.addUserRole(userId,roleId);

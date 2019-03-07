@@ -28,12 +28,18 @@ public abstract class BaseEntity implements Serializable{
 
     /**创建者Id*/
     private String creatorId;
+    /**创建者名称*/
+    private String creatorName;
 
     /**修改者Id*/
     private String modifiedId;
+    /**修改者名称*/
+    private String modifiedName;
 
     /**所有者Id*/
     private String ownerId;
+    /**所有者名称*/
+    private String ownerName;
 
     /**备注*/
     @Column(columnDefinition = "text")
@@ -71,6 +77,14 @@ public abstract class BaseEntity implements Serializable{
         this.creatorId = creatorId;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
     public String getModifiedId() {
         return modifiedId;
     }
@@ -79,12 +93,28 @@ public abstract class BaseEntity implements Serializable{
         this.modifiedId = modifiedId;
     }
 
+    public String getModifiedName() {
+        return modifiedName;
+    }
+
+    public void setModifiedName(String modifiedName) {
+        this.modifiedName = modifiedName;
+    }
+
     public String getOwnerId() {
         return ownerId;
     }
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getRemark() {

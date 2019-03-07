@@ -1,13 +1,15 @@
 package cn.mauth.crm.common.service;
 
 import cn.mauth.crm.common.bean.BusStats;
+import cn.mauth.crm.common.bean.StageStats;
 import cn.mauth.crm.common.domain.BusRecord;
 import cn.mauth.crm.common.domain.BusinessOpportunity;
 import cn.mauth.crm.common.repository.BusRecordRepository;
 import cn.mauth.crm.common.repository.BusinessOpportunityRepository;
-import cn.mauth.crm.util.base.BaseService;
+import cn.mauth.crm.common.repository.SysUserInfoRepository;
 import cn.mauth.crm.util.common.DateUtil;
 import cn.mauth.crm.util.common.PageUtil;
+import cn.mauth.crm.util.common.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.math.BigInteger;
 import java.util.*;
 
 @Service
@@ -25,8 +28,8 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
     @Autowired
     private BusRecordRepository busRecordRepository;
 
-    public BusiService(BusinessOpportunityRepository repository) {
-        super(repository);
+    public BusiService(BusinessOpportunityRepository repository, SysUserInfoRepository sysUserInfoRepository) {
+        super(repository, sysUserInfoRepository);
     }
 
     @Transactional
@@ -137,35 +140,76 @@ public class BusiService extends BaseService<BusinessOpportunityRepository,Busin
     }
 
 
-    public Map<String, BusStats> statistics(Long userId){
+    public Map<String, BusStats> statistics(Long orgId,boolean isUser){
         Date date=new Date();
-        String day=repository.statistics(DateUtil.SQL_DAY,DateUtil.toDay(date));
-        String week=repository.statistics(DateUtil.SQL_WEEK,DateUtil.toWeek(date));
-        String month=repository.statistics(DateUtil.SQL_MONTH,DateUtil.toMonth(date));
-        String year=repository.statistics(DateUtil.SQL_YEAR,DateUtil.toYear(date));
 
         Map<String,BusStats> result=new HashMap<>();
 
-        result.put("day",this.getBusStats(day));
-        result.put("week",this.getBusStats(week));
-        result.put("month",this.getBusStats(month));
-        result.put("year",this.getBusStats(year));
-
-        return result;
-    }
-
-    public Map<String, BusStats> statisticsOfGroup(Long orgId){
-        Map<String,BusStats> result=new HashMap<>();
+        result.put("day",this.getBusStats(DateUtil.SQL_DAY,DateUtil.toDay(date),orgId,isUser));
+        result.put("week",this.getBusStats(DateUtil.SQL_WEEK,DateUtil.toWeek(date),orgId,isUser));
+        result.put("month",this.getBusStats(DateUtil.SQL_MONTH,DateUtil.toMonth(date),orgId,isUser));
+        result.put("year",this.getBusStats(DateUtil.SQL_YEAR,DateUtil.toYear(date),orgId,isUser));
 
         return result;
     }
 
 
     private BusStats getBusStats(String data){
+        if(StringUtils.isEmpty(data))
+            return null;
         String[] str=data.split(",");
+        if(str.length!=5)
+            return null;
         int a=Integer.valueOf(str[0]);
-        int b=Integer.valueOf(str[1]);
-        int c=Integer.valueOf(str[2]);
-        return new BusStats(a,b,c);
+        double a1=str[1].equals("null")?0:Double.valueOf(str[1]);
+        int b=str[2].equals("null")?0:Integer.valueOf(str[2]);
+        double b1=str[3].equals("null")?0:Double.valueOf(str[3]);
+        int c=str[4].equals("null")?0:Integer.valueOf(str[4]);
+        return new BusStats(a,a1,b,b1,c);
     }
+
+    private List<StageStats> getStageStats(List<Object[]> data){
+        if(data==null||data.size()==0)
+            return null;
+        List<StageStats> list=new ArrayList<>();
+
+        Object[] obj=null;
+
+        for (int i=0;i<data.size();i++){
+            obj=data.get(i);
+            String name=(String) obj[0];
+            int sort=(int) obj[1];
+            int total=((BigInteger) obj[2]).intValue();
+            double totalAmount=(double) obj[3];
+            list.add(new StageStats(name,sort,total,totalAmount));
+        }
+
+        return list;
+    }
+
+    public BusStats getBusStats(String format,String timeStr,Long orgId,boolean isUser){
+        String data=null;
+        List<Object[]> stageDada=null;
+        if(isUser){
+
+            data=repository.statisticsFromOrg(format,timeStr,orgId);
+
+            stageDada=repository.statisticsStage(format, timeStr, orgId);
+        }else{
+            String ownerId=String.valueOf(SessionUtil.getUserId());
+
+            data=repository.statisticsFromOwnerId(format,timeStr,ownerId);
+
+            stageDada=repository.statisticsStage(format, timeStr, orgId,ownerId);
+        }
+
+
+        BusStats busStats=this.getBusStats(data);
+
+        busStats.setList(this.getStageStats(stageDada));
+
+        return busStats;
+    }
+
+
 }

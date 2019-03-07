@@ -1,6 +1,5 @@
 package cn.mauth.crm.boss.controller.api;
 
-import cn.mauth.crm.common.domain.Contract;
 import cn.mauth.crm.common.domain.Target;
 import cn.mauth.crm.common.service.TargetService;
 import cn.mauth.crm.util.base.BaseController;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/crm/v1/targets")
 @ApiModel("目标API")
@@ -21,28 +18,16 @@ public class TargetController extends BaseController{
     @Autowired
     private TargetService service;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation("根据id查询目标")
     public Result findById(@PathVariable Long id){
-
-        Target target=service.findById(id);
-
-        if(target==null)
-            return error("没有找到id:"+id+"的目标");
-
-        return ok(target);
+        return ok(service.findById(id));
     }
 
     @GetMapping
     @ApiOperation("查询所有目标")
-    public Result findAll(){
-
-        List<Target> list=service.findAll();
-
-        if(list==null || list.size()==0)
-            return error("还没有目标");
-
-        return ok(list);
+    public Result findAll(Target bean){
+        return ok(service.findAll());
     }
 
     @GetMapping("/page")
@@ -61,7 +46,7 @@ public class TargetController extends BaseController{
         return error("添加失败");
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @ApiOperation("根据id修改目标")
     public Result update(@PathVariable Long id,Target target) {
         if(service.update(target)){
@@ -70,7 +55,7 @@ public class TargetController extends BaseController{
         return error("修改失败");
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     @ApiOperation("根据id删除目标")
     public Result deleteBy(@PathVariable Long id) {
         if(service.deleteById(id)){

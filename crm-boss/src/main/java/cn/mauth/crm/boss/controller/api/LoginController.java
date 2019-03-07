@@ -1,16 +1,18 @@
 package cn.mauth.crm.boss.controller.api;
 
+import cn.mauth.crm.boss.shiro.UserToken;
 import cn.mauth.crm.common.bean.LoginToken;
-import cn.mauth.crm.common.service.SysUserInfoService;
 import cn.mauth.crm.common.service.WxService;
 import cn.mauth.crm.util.base.BaseController;
 import cn.mauth.crm.util.common.Result;
+import cn.mauth.crm.util.enums.LoginEnum;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/crm/v1/login")
@@ -18,42 +20,87 @@ import java.util.Map;
 public class LoginController extends BaseController{
 
     @Autowired
-    private SysUserInfoService sysUserInfoService;
-
-    @Autowired
     private WxService wxService;
 
-
-    @GetMapping(value = "/wx", produces = "application/json")
-    @ApiOperation("微信登录获取sessionId")
-    public Result wxLogin(@RequestParam(value = "code") String wxCode){
-
-        Map<String,Object> wxSessionMap = wxService.getWxSession(wxCode);
-
-        if(null == wxSessionMap){
-            return Result.of(50010, null);
+    @GetMapping
+    @ApiOperation(value = "登录首页")
+    public Result login(){
+        if(SecurityUtils.getSubject().isAuthenticated()){
+            return ok("用户已经登录");
         }
-
-        //获取异常
-        if(wxSessionMap.containsKey("errcode")){
-            return Result.of(50020, wxSessionMap.get("errmsg").toString());
-        }
-
-        String wxOpenId = (String) wxSessionMap.get("openid");
-
-        String wxSessionKey = (String) wxSessionMap.get("session_key");
-
-        Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
-
-        String sessionId = wxService.create3rdSession(wxOpenId, wxSessionKey, expires);
-
-        return ok(sessionId);
+        return Result.UNAUTHORIZED;
     }
 
-    @PostMapping("/phone")
-    @ApiOperation("手机登录获取sessionId")
-    public Result phoneLogin(LoginToken token){
-        return sysUserInfoService.login(token);
+    @PostMapping
+    @ApiOperation(value = "手机登录")
+    public Result login(LoginToken loginToken){
+        Subject subject= SecurityUtils.getSubject();
+
+        if(subject.isAuthenticated()){
+            return ok("用户:"+loginToken.getPhone()+"已经登录成功");
+        }
+
+        UserToken token=new UserToken();
+
+        token.setUsername(loginToken.getPhone());
+
+        token.setPassword(loginToken.getPassword().toCharArray());
+
+        token.setLoginType(LoginEnum.PHONE);
+
+        subject.login(token);
+
+        log.info("用户:"+loginToken.getPhone()+"登录成功");
+
+        JSONObject jsonObject=new JSONObject();
+
+        jsonObject.put("sessionId",subject.getSession().getId());
+
+        return ok(jsonObject);
+    }
+
+
+    @GetMapping(value = "/wx",produces = "application/json")
+    @ApiOperation(value = "微信登录")
+    public Result wxLogin(@RequestParam("code") String code){
+
+        Subject subject= SecurityUtils.getSubject();
+
+        String openId=wxService.getOpenId(code);
+
+        if(openId==null)
+            return error("没有找到openId");
+
+        if(subject.isAuthenticated()){
+            return ok("用户openId:"+openId+"已经登录成功");
+        }
+
+        UserToken token=new UserToken();
+
+        token.setUsername(openId);
+
+        token.setLoginType(LoginEnum.WEIXIN);
+
+        token.setPassword("111111".toCharArray());//为了防止异常,密码没有意义
+
+        subject.login(token);
+
+        log.info("用户微信登录成功");
+
+        JSONObject jsonObject=new JSONObject();
+
+        jsonObject.put("sessionId",subject.getSession().getId());
+
+        return ok(jsonObject);
+    }
+
+    @GetMapping("/logout")
+    @ApiOperation(value = "注销")
+    public Result logout(){
+
+        SecurityUtils.getSubject().logout();
+
+        return ok("注销成功");
     }
 
 }

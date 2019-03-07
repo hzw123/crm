@@ -33,6 +33,10 @@ public class DateUtil {
         return week;
     }
 
+    public static String getDate(){
+        return DateUtil.toDay(new Date());
+    }
+
     public static String toMonth(Date date){
         return DateUtil.format(MONTH).format(date);
     }

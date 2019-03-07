@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface SysRoleRepository extends BaseRepository<SysRole,Long> {
 
@@ -21,4 +23,7 @@ public interface SysRoleRepository extends BaseRepository<SysRole,Long> {
 
     @Query(value = "select count(1) from sys_user_role where user_id=:userId and role_id=:roleId",nativeQuery = true)
     int countByUserAndRole(@Param("userId") Long userId,@Param("roleId") Long roleId);
+
+    @Query(value = "select *from sys_role where id in (:ids)",nativeQuery = true)
+    List<SysRole> findByIds(@Param("ids") String ids);
 }

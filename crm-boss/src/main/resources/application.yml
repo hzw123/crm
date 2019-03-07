@@ -16,6 +16,19 @@ spring:
   profiles:
     active: local
 
+  #shiro
+  shiro:
+    login-url: /crm/v1/login
+    success-url: /
+    unauthorized-url: /error/403
+    filter-chain-definition-map:
+      anon: /crm/v1/login,/crm/v1/login/wx,/swagger-ui.html,/swagger/**,/webjars/**,/swagger-resources/**,/v2/api-docs,/druid/**
+      logout: /logout #退出
+      #需要认证的路径
+      authc: /authc
+      user: /**
+
+
 img:
   local:
     path: e:/file/crm

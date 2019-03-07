@@ -19,7 +19,7 @@ public class SysRole extends BaseEntity{
     /**状态*/
     private int status;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sys_role_auth",
     joinColumns = {@JoinColumn(name = "role_Id")},
     inverseJoinColumns = {@JoinColumn(name = "auth_id")})

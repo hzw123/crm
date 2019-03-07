@@ -14,6 +14,7 @@ public class BusinessOpportunity extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
 
+
     /**来源*/
     @Column(columnDefinition = "text")
     private String source;
@@ -21,8 +22,11 @@ public class BusinessOpportunity extends BaseEntity{
     /**所属客户Id*/
     private Long accountId;
 
+    /**机构Id*/
+    private Long orgId;
+
     /**联系人*/
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "bus_contact",
     joinColumns = {@JoinColumn(name = "bus_id")},
     inverseJoinColumns = {@JoinColumn(name = "contact_id")})
@@ -98,5 +102,13 @@ public class BusinessOpportunity extends BaseEntity{
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
     }
 }
